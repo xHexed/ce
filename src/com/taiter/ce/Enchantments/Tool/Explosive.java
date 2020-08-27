@@ -19,8 +19,11 @@ package com.taiter.ce.Enchantments.Tool;
 */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import com.taiter.ce.ExplodeEnchantmentEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -76,7 +79,25 @@ public class Explosive extends CEnchantment {
                     if ((!(x == 0 && y == 0 && z == 0)) && (!(x == r && y == 0 && z == 0)) && (!(x == 0 && y == r && z == 0)) && (!(x == 0 && y == 0 && z == r)) && (!(x == r && y == r && z == 0))
                             && (!(x == 0 && y == r && z == r)) && (!(x == r && y == 0 && z == r)) && (!(x == r && y == r && z == r)))
                         locations.add(new Location(sL.getWorld(), sL.getX() + x, sL.getY() + y, sL.getZ() + z));
+        if (!DropItems) {
+            final List<Block> blockList = new ArrayList<>();
+            final List<ItemStack> drops = new ArrayList<>();
+            for (final Location loc : locations) {
+                final String iMat = item.getType().toString();
+                final Block b = loc.getBlock();
+                final String bMat = b.getType().toString();
 
+                if (isUsable(iMat, bMat))
+                    if (!loc.getBlock().getDrops(item).isEmpty())
+                        if (Tools.checkWorldGuard(loc, player, "BUILD", false)) {
+                            blockList.add(b);
+                            drops.addAll(b.getDrops(item));
+                            loc.getBlock().setType(Material.AIR);
+                        }
+            }
+            final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player, drops);
+            Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
+        }
         for (Location loc : locations) {
             String iMat = item.getType().toString();
             Block b = loc.getBlock();
@@ -87,11 +108,6 @@ public class Explosive extends CEnchantment {
                     if (Tools.checkWorldGuard(loc, player, "BUILD", false))
                         if (DropItems)
                             loc.getBlock().breakNaturally(item);
-                        else
-                            for (ItemStack i : loc.getBlock().getDrops(item)) {
-                                player.getInventory().addItem(i);
-                                loc.getBlock().setType(Material.AIR);
-                            }
         }
 
     }
