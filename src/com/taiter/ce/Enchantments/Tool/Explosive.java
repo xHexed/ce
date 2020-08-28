@@ -98,18 +98,18 @@ public class Explosive extends CEnchantment {
             final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player, drops);
             Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
         }
-        for (Location loc : locations) {
-            String iMat = item.getType().toString();
-            Block b = loc.getBlock();
-            String bMat = b.getType().toString();
+        else {
+            for (Location loc : locations) {
+                String iMat = item.getType().toString();
+                Block b = loc.getBlock();
+                String bMat = b.getType().toString();
 
-            if (isUsable(iMat, bMat))
-                if (!loc.getBlock().getDrops(item).isEmpty())
-                    if (Tools.checkWorldGuard(loc, player, "BUILD", false))
-                        if (DropItems)
+                if (isUsable(iMat, bMat))
+                    if (!loc.getBlock().getDrops(item).isEmpty())
+                        if (Tools.checkWorldGuard(loc, player, "BUILD", false))
                             loc.getBlock().breakNaturally(item);
+            }
         }
-
     }
 
     // Checks if the Material of the block (bMat) is intended to be mined by the
