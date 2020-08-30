@@ -81,22 +81,22 @@ public class Explosive extends CEnchantment {
                         locations.add(new Location(sL.getWorld(), sL.getX() + x, sL.getY() + y, sL.getZ() + z));
         if (!DropItems) {
             final List<Block> blockList = new ArrayList<>();
-            final List<ItemStack> drops = new ArrayList<>();
             for (final Location loc : locations) {
                 final String iMat = item.getType().toString();
                 final Block b = loc.getBlock();
                 final String bMat = b.getType().toString();
 
                 if (isUsable(iMat, bMat))
-                    if (!loc.getBlock().getDrops(item).isEmpty())
+                    if (!b.getDrops(item).isEmpty())
                         if (Tools.checkWorldGuard(loc, player, "BUILD", false)) {
                             blockList.add(b);
-                            drops.addAll(b.getDrops(item));
-                            loc.getBlock().setType(Material.AIR);
                         }
             }
-            final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player, drops);
+            final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player);
             Bukkit.getPluginManager().callEvent(explodeEvent);
+            for (final Block block : blockList) {
+                block.setType(Material.AIR);
+            }
         }
         else {
             for (Location loc : locations) {
