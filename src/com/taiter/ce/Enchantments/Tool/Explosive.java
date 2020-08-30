@@ -115,12 +115,10 @@ public class Explosive extends CEnchantment {
     // Checks if the Material of the block (bMat) is intended to be mined by the
     // item's Material (iMat)
     private boolean isUsable(String iMat, String bMat) {
-        if ((iMat.endsWith("PICKAXE") && (bMat.contains("ORE") || (!bMat.contains("STAIRS") && bMat.contains("STONE")) || bMat.equals("STAINED_CLAY") || bMat.equals("NETHERRACK")))
+        return (iMat.endsWith("PICKAXE") && (bMat.contains("ORE") || (!bMat.contains("STAIRS") && bMat.contains("STONE")) || bMat.equals("STAINED_CLAY") || bMat.equals("NETHERRACK")))
                 || (iMat.endsWith("SPADE") && (bMat.contains("SAND") || bMat.equals("DIRT") || bMat.equals("SNOW_BLOCK") || bMat.equals("SNOW") || bMat.equals("MYCEL") || bMat.equals("CLAY")
-                || bMat.equals("GRAVEL") || bMat.equals("GRASS")))
-                || (iMat.endsWith("_AXE") && bMat.contains("LOG") || bMat.contains("PLANKS")) || (iMat.endsWith("HOE") && (bMat.equals("CROPS") || bMat.equals("POTATO") || bMat.equals("CARROT"))))
-            return true;
-        return false;
+                || bMat.equals("GRAVEL") || bMat.equals("GRASS"))) || bMat.contains("BLOCK")
+                || (iMat.endsWith("_AXE") && bMat.contains("LOG") || bMat.contains("PLANKS")) || (iMat.endsWith("HOE") && (bMat.equals("CROPS") || bMat.equals("POTATO") || bMat.equals("CARROT")));
     }
 
     @Override
