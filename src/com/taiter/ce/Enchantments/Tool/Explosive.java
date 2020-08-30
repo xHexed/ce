@@ -96,7 +96,7 @@ public class Explosive extends CEnchantment {
                         }
             }
             final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player, drops);
-            Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
+            Bukkit.getPluginManager().callEvent(explodeEvent);
         }
         else {
             for (Location loc : locations) {
