@@ -38,7 +38,7 @@ import com.taiter.ce.Enchantments.CEnchantment;
 public class Implants extends CEnchantment {
 
 	public int	burstDelay;
-	List<Player> inWater = new ArrayList<Player>();
+	final List<Player> inWater = new ArrayList<>();
 
 	public Implants(Application app) {
 		super(app);		
@@ -69,7 +69,7 @@ public class Implants extends CEnchantment {
 						} else
 							this.cancel();
 					}
-				}.runTaskTimer(Main.plugin, 20l, 60l);
+				}.runTaskTimer(Main.plugin, 20L, 60L);
 			}
 		generateCooldown(event.getPlayer(), burstDelay);
 		

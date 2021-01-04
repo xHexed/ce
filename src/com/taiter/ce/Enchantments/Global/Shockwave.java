@@ -60,7 +60,7 @@ public class Shockwave extends CEnchantment {
             public void run() {
                 event.getEntity().setVelocity(new Vector(0, 1 + (level / 4), 0));
             }
-        }.runTaskLater(getPlugin(), 1l);
+        }.runTaskLater(getPlugin(), 1L);
 
         Location loc = damager.getLocation();
         loc.setY(damager.getLocation().getY() - 1);
@@ -95,7 +95,7 @@ public class Shockwave extends CEnchantment {
                             this.cancel();
                         }
                     }
-                }.runTaskTimer(main, 0l, 5l);
+                }.runTaskTimer(main, 0L, 5L);
             }
         }
 
@@ -117,27 +117,24 @@ public class Shockwave extends CEnchantment {
             return false;
         if (!block.getRelative(0, 0, 1).getType().isSolid())
             return false;
-        if (!block.getRelative(0, 0, -1).getType().isSolid())
-            return false;
-        return true;
+        return block.getRelative(0, 0, -1).getType().isSolid();
     }
 
     @SuppressWarnings("deprecation")
     private void makeList() {
-        ForbiddenMaterials = new ArrayList<Material>();
+        ForbiddenMaterials = new ArrayList<>();
         String mS = getConfig().getString("Enchantments." + getOriginalName() + ".ForbiddenMaterials");
         mS = mS.replace(" ", "");
 
         String[] s = mS.split(",");
 
-        for (int i = 0; i < s.length; i++)
+        for (String value : s)
             try {
-                ForbiddenMaterials.add(Material.getMaterial(Integer.parseInt(s[i])));
+                ForbiddenMaterials.add(Material.getMaterial(Integer.parseInt(value)));
             } catch (NumberFormatException ex) {
-                ForbiddenMaterials.add(Material.getMaterial(s[i].toUpperCase()));
+                ForbiddenMaterials.add(Material.getMaterial(value.toUpperCase()));
             }
-        if (ForbiddenMaterials.contains(Material.AIR))
-            ForbiddenMaterials.remove(Material.AIR);
+        ForbiddenMaterials.remove(Material.AIR);
     }
 
 }

@@ -109,7 +109,7 @@ public class FireworkBattery extends CItem {
 						fireworks--;
 					}
 				}
-		}.runTaskTimer(getPlugin(), 20l, 10l);
+		}.runTaskTimer(getPlugin(), 20L, 10L);
 			
 		return false;
 	}

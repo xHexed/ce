@@ -35,7 +35,7 @@ import com.taiter.ce.Tools;
 
 public abstract class CEnchantment extends CBasic {
 
-    static public enum Application {
+    public enum Application {
         ARMOR,
         GLOBAL,
         BOW,
@@ -51,12 +51,12 @@ public abstract class CEnchantment extends CBasic {
     private static int amountHelmet = 0;
     private static int amountBoots = 0;
 
-    Application app;
+    final Application app;
     double enchantProbability;
     int enchantmentMaxLevel;
     int occurrenceChance;
-    List<Integer> runecraftCostLevel;
-    List<Double> runecraftCostMoney;
+    final List<Integer> runecraftCostLevel;
+    final List<Double> runecraftCostMoney;
     List<Double> costPerLevel;
     private boolean hasRetriedConfig;
 
@@ -104,9 +104,9 @@ public abstract class CEnchantment extends CBasic {
         }
 
         this.occurrenceChance = 100;
-        this.costPerLevel = new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d));
-        this.runecraftCostLevel = new ArrayList<Integer>();
-        this.runecraftCostMoney = new ArrayList<Double>();
+        this.costPerLevel = new ArrayList<>(Arrays.asList(0d, 0d, 0d, 0d, 0d));
+        this.runecraftCostLevel = new ArrayList<>();
+        this.runecraftCostMoney = new ArrayList<>();
 
         this.configEntries.put("Enabled", true);
         this.configEntries.put("DisplayName", originalName);
@@ -117,9 +117,7 @@ public abstract class CEnchantment extends CBasic {
     }
 
     public boolean getHasCooldown(Player p) {
-        if (cooldown.contains(p))
-            return true;
-        return false;
+        return cooldown.contains(p);
     }
 
     public void generateCooldown(final Player p, long time) {
@@ -198,7 +196,7 @@ public abstract class CEnchantment extends CBasic {
 
             if (costPerLevel.isEmpty()) {
                 double cost = Double.parseDouble(getConfig().getString("Enchantments." + getOriginalName() + ".Cost"));
-                costPerLevel = new ArrayList<Double>();
+                costPerLevel = new ArrayList<>();
                 for (int i = 0; i < this.enchantmentMaxLevel; i++) {
                     costPerLevel.add(cost);
                 }

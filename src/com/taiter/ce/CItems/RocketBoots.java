@@ -39,7 +39,7 @@ import com.taiter.ce.EffectManager;
 
 public class RocketBoots extends CItem {
 
-	String[] states = {	
+	final String[] states = {
 			ChatColor.DARK_GRAY + "Power: " + ChatColor.RED	  + "" + ChatColor.ITALIC + "OFFLINE",
 			ChatColor.DARK_GRAY + "Power: " + ChatColor.GREEN + "" + ChatColor.ITALIC + "ONLINE",
 			ChatColor.RED + "Out of Fuel"
@@ -121,7 +121,7 @@ public class RocketBoots extends CItem {
 								this.cancel();
 							}
 						}
-					}.runTaskTimer(main, 0l, 10l);
+					}.runTaskTimer(main, 0L, 10L);
 					
 					}
 				}
@@ -166,7 +166,7 @@ public class RocketBoots extends CItem {
 							this.cancel();
 						}
 					}
-				}.runTaskTimer(main, 0l, 5l);
+				}.runTaskTimer(main, 0L, 5L);
 				
 			} else {
 				
@@ -201,9 +201,7 @@ public class RocketBoots extends CItem {
 	}
 	
 	private boolean isRocketBoots(ItemStack item) {
-		if(item != null && item.getType().toString().endsWith("BOOTS") && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && (item.getItemMeta().getDisplayName().equals(this.getDisplayName()) || item.getItemMeta().getDisplayName().equals(this.getOriginalName())) )
-			return true;
-		return false;
+		return item != null && item.getType().toString().endsWith("BOOTS") && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && (item.getItemMeta().getDisplayName().equals(this.getDisplayName()) || item.getItemMeta().getDisplayName().equals(this.getOriginalName()));
 	}
 
 }

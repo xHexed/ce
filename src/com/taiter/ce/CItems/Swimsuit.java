@@ -34,7 +34,7 @@ public class Swimsuit extends CItem {
 
 	int	DamageBoostLevel;
 	int	SpeedBoostLevel;
-	public String[] parts = {
+	public final String[] parts = {
 			ChatColor.BLUE + "Scuba Mask",
 			ChatColor.BLUE + "Upper Swimsuit",
 			ChatColor.BLUE + "Lower Swimsuit",
@@ -75,7 +75,7 @@ public class Swimsuit extends CItem {
 							removeLock(player);
 						}
 					}
-				}.runTaskTimer(main, 0l, 80l);
+				}.runTaskTimer(main, 0L, 80L);
 			}
 
 		}

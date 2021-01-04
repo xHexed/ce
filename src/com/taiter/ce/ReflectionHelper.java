@@ -47,15 +47,13 @@ public class ReflectionHelper {
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
-
-        new EffectManager();
     }
 
     public static Constructor<?> getEffectPacketConstructor() {
         return effectPacketConstructor;
     }
 
-    public static Object loadEnumParticleValues() throws NoSuchMethodException, SecurityException {
+    public static Object loadEnumParticleValues() throws SecurityException {
         return getNMSClass("EnumParticle").getEnumConstants();
     }
 

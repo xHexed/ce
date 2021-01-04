@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public abstract class CBasic {
 
-    static public enum Trigger {
+    public enum Trigger {
         INTERACT,
         INTERACT_ENTITY,
         INTERACT_LEFT,
@@ -30,20 +30,20 @@ public abstract class CBasic {
         DEATH
     }
 
-    protected Plugin main = Main.plugin;
+    protected final Plugin main = Main.plugin;
 
-    protected HashSet<Player> cooldown = new HashSet<Player>();
-    protected HashSet<Player> lockList = new HashSet<Player>();
-    protected HashSet<Trigger> triggers = new HashSet<Trigger>();
+    protected final HashSet<Player> cooldown = new HashSet<>();
+    protected final HashSet<Player> lockList = new HashSet<>();
+    protected final HashSet<Trigger> triggers = new HashSet<>();
 
     protected String displayName;
     protected String originalName;
     protected String permissionName;
     protected String typeString;
 
-    protected HashMap<PotionEffectType, Integer> potionsOnWear = new HashMap<PotionEffectType, Integer>();
+    protected final HashMap<PotionEffectType, Integer> potionsOnWear = new HashMap<>();
 
-    protected Map<String, Object> configEntries = new LinkedHashMap<String, Object>();
+    protected final Map<String, Object> configEntries = new LinkedHashMap<>();
 
     public Plugin getPlugin() {
         return this.main;

@@ -50,7 +50,7 @@ public class IceAspect extends CEnchantment {
     int chanceSpecialFreeze;
     boolean specialFreeze;
 
-    public List<HashMap<Block, String>> IceLists = new ArrayList<HashMap<Block, String>>();
+    public final List<HashMap<Block, String>> IceLists = new ArrayList<>();
 
     public IceAspect(Application app) {
         super(app);
@@ -114,7 +114,7 @@ public class IceAspect extends CEnchantment {
 
     @SuppressWarnings("deprecation")
     private HashMap<Block, String> getIgloo(Location start, int size, Player p) {
-        HashMap<Block, String> list = new HashMap<Block, String>();
+        HashMap<Block, String> list = new HashMap<>();
         int bx = start.getBlockX();
         int by = start.getBlockY();
         int bz = start.getBlockZ();

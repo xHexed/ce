@@ -85,7 +85,7 @@ public class Bombardment extends CEnchantment {
 				
 				EffectManager.playSound(l, "ENTITY_ENDERDRAGON_GROWL", Volume, 2f);
 			}
-		}.runTaskTimer(getPlugin(), 0l, 5l);
+		}.runTaskTimer(getPlugin(), 0L, 5L);
 		}
 	}
 

@@ -77,23 +77,23 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CEListener implements Listener {
 
-    HashSet<CBasic> move = new HashSet<CBasic>();
-    HashSet<CBasic> interact = new HashSet<CBasic>();
-    HashSet<CBasic> interactE = new HashSet<CBasic>();
-    HashSet<CBasic> interactR = new HashSet<CBasic>();
-    HashSet<CBasic> interactL = new HashSet<CBasic>();
-    HashSet<CBasic> damageTaken = new HashSet<CBasic>();
-    HashSet<CBasic> damageGiven = new HashSet<CBasic>();
-    HashSet<CBasic> damageNature = new HashSet<CBasic>();
-    HashSet<CBasic> shootBow = new HashSet<CBasic>();
-    HashSet<CBasic> projectileThrow = new HashSet<CBasic>();
-    HashSet<CBasic> projectileHit = new HashSet<CBasic>();
-    HashSet<CBasic> death = new HashSet<CBasic>();
-    HashSet<CBasic> blockPlaced = new HashSet<CBasic>();
-    HashSet<CBasic> blockBroken = new HashSet<CBasic>();
-    HashSet<CBasic> wearItem = new HashSet<CBasic>();
+    final HashSet<CBasic> move = new HashSet<>();
+    final HashSet<CBasic> interact = new HashSet<>();
+    final HashSet<CBasic> interactE = new HashSet<>();
+    final HashSet<CBasic> interactR = new HashSet<>();
+    final HashSet<CBasic> interactL = new HashSet<>();
+    final HashSet<CBasic> damageTaken = new HashSet<>();
+    final HashSet<CBasic> damageGiven = new HashSet<>();
+    final HashSet<CBasic> damageNature = new HashSet<>();
+    final HashSet<CBasic> shootBow = new HashSet<>();
+    final HashSet<CBasic> projectileThrow = new HashSet<>();
+    final HashSet<CBasic> projectileHit = new HashSet<>();
+    final HashSet<CBasic> death = new HashSet<>();
+    final HashSet<CBasic> blockPlaced = new HashSet<>();
+    final HashSet<CBasic> blockBroken = new HashSet<>();
+    final HashSet<CBasic> wearItem = new HashSet<>();
 
-    private boolean useRuneCrafting = Main.plugin.getConfig().getBoolean("Global.Runecrafting.Enabled");
+    private final boolean useRuneCrafting = Main.plugin.getConfig().getBoolean("Global.Runecrafting.Enabled");
 
     /*
      * Almost all priorities are set to Monitor, the highest priority possible,
@@ -119,7 +119,6 @@ public class CEListener implements Listener {
             if (event.getView().getTopInventory().getName().equals(
                     ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "abc" + ChatColor.RESET + ChatColor.DARK_PURPLE + " Runecrafting " + ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "cba")) {
                 CEventHandler.updateRunecraftingInventory(event.getInventory());
-                return;
             }
     }
 
@@ -257,7 +256,7 @@ public class CEListener implements Listener {
                         ItemStack backButton = new ItemStack(Material.NETHER_STAR);
 
                         ItemMeta tempMeta = backButton.getItemMeta();
-                        List<String> tempLore = new ArrayList<String>();
+                        List<String> tempLore = new ArrayList<>();
 
                         tempMeta.setDisplayName(ChatColor.AQUA + "Back");
                         backButton.setItemMeta(tempMeta);
@@ -569,7 +568,7 @@ public class CEListener implements Listener {
                             return;
                         }
 
-                        List<String> lore = new ArrayList<String>();
+                        List<String> lore = new ArrayList<>();
                         ItemMeta im = inHand.getItemMeta();
 
                         if (inHand.getItemMeta().hasLore()) {
@@ -629,11 +628,9 @@ public class CEListener implements Listener {
                         inHand.setItemMeta(im);
                         if (!inHand.containsEnchantment(EnchantManager.getGlowEnchantment()))
                             inHand.addUnsafeEnchantment(EnchantManager.getGlowEnchantment(), 0);
-                        return;
 
                     } else {
                         p.sendMessage(ChatColor.RED + "You do not have an item in your hand.");
-                        return;
                     }
             }
 

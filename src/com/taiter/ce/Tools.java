@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +30,6 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -54,8 +52,8 @@ import com.taiter.ce.Enchantments.EnchantManager;
 
 public class Tools {
 
-    public static String prefix = "CE - ";
-    public static Random random = new Random();
+    public static final String prefix = "CE - ";
+    public static final Random random = new Random();
 
     //ENCHANTMENTS
     public static boolean isApplicationCorrect(Application app, Material matToApplyTo) {
@@ -70,9 +68,7 @@ public class Tools {
             return true;
         else if (app == Application.ARMOR && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS")))
             return true;
-        else if (app == Application.TOOL && (mat.endsWith("PICKAXE") || mat.endsWith("SPADE") || mat.endsWith("AXE") || mat.endsWith("HOE")))
-            return true;
-        return false;
+        else return app == Application.TOOL && (mat.endsWith("PICKAXE") || mat.endsWith("SPADE") || mat.endsWith("AXE") || mat.endsWith("HOE"));
     }
 
     public static CItem getItemByOriginalname(String name) {
@@ -100,26 +96,27 @@ public class Tools {
 
     public static Inventory getNextInventory(String name) {
         name = ChatColor.stripColor(name);
-        if (name.equals("Enchantments"))
-            return Main.CEEnchantmentMainMenu;
-        else if (name.equals("Items"))
-            return Main.CEItemMenu;
-        else if (name.equals("Runecrafting")) {
-            Inventory einv = Bukkit.createInventory(null, InventoryType.FURNACE,
-                    ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "abc" + ChatColor.RESET + ChatColor.DARK_PURPLE + " Runecrafting " + ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "cba");
-            return einv;
-        } else if (name.equals("Global"))
-            return Main.CEGlobalMenu;
-        else if (name.equals("Bow"))
-            return Main.CEBowMenu;
-        else if (name.equals("Helmet"))
-            return Main.CEHelmetMenu;
-        else if (name.equals("Boots"))
-            return Main.CEBootsMenu;
-        else if (name.equals("Armor"))
-            return Main.CEArmorMenu;
-        else if (name.equals("Tool"))
-            return Main.CEToolMenu;
+        switch (name) {
+            case "Enchantments":
+                return Main.CEEnchantmentMainMenu;
+            case "Items":
+                return Main.CEItemMenu;
+            case "Runecrafting":
+                return Bukkit.createInventory(null, InventoryType.FURNACE,
+                        ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "abc" + ChatColor.RESET + ChatColor.DARK_PURPLE + " Runecrafting " + ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "cba");
+            case "Global":
+                return Main.CEGlobalMenu;
+            case "Bow":
+                return Main.CEBowMenu;
+            case "Helmet":
+                return Main.CEHelmetMenu;
+            case "Boots":
+                return Main.CEBootsMenu;
+            case "Armor":
+                return Main.CEArmorMenu;
+            case "Tool":
+                return Main.CEToolMenu;
+        }
         return null;
     }
 
@@ -136,10 +133,7 @@ public class Tools {
         if (p.hasPermission(name + cb.getOriginalName())) {
             return true;
         }
-        if (p.hasPermission(name + cb.getPermissionName())) {
-            return true;
-        }
-        return false;
+        return p.hasPermission(name + cb.getPermissionName());
     }
 
     public static Inventory getEnchantmentMenu(Player p, String name) {
@@ -153,7 +147,7 @@ public class Tools {
                     continue;
                 ItemStack item = enchantments.getItem(i);
                 ItemMeta im = item.getItemMeta();
-                List<String> lore = new ArrayList<String>();
+                List<String> lore = new ArrayList<>();
                 if (im.hasLore())
                     lore = im.getLore();
                 for (CEnchantment ce : EnchantManager.getEnchantments()) {
@@ -183,7 +177,7 @@ public class Tools {
                 if (item == null || item.getType().equals(Material.AIR))
                     continue;
                 ItemMeta im = item.getItemMeta();
-                List<String> lore = new ArrayList<String>();
+                List<String> lore = new ArrayList<>();
                 if (im.hasLore())
                     lore = im.getLore();
                 for (CItem ci : Main.items)
@@ -207,7 +201,7 @@ public class Tools {
         ItemStack backButton = new ItemStack(Material.NETHER_STAR);
 
         ItemMeta tempMeta = backButton.getItemMeta();
-        List<String> tempLore = new ArrayList<String>();
+        List<String> tempLore = new ArrayList<>();
 
         tempMeta.setDisplayName(ChatColor.AQUA + "Back");
         backButton.setItemMeta(tempMeta);
@@ -460,7 +454,7 @@ public class Tools {
 
     public static void writeConfigEntries(CBasic ce) {
         for (String entry : ce.configEntries.keySet()) {
-            String fullPath = (ce.getType() == "Enchantment" ? "Enchantments" : ce.getType()) + "." + ce.getOriginalName() + "." + entry;
+            String fullPath = (ce.getType().equals("Enchantment") ? "Enchantments" : ce.getType()) + "." + ce.getOriginalName() + "." + entry;
             if (!Main.plugin.getConfig().contains(fullPath))
                 Main.plugin.getConfig().set(fullPath, ce.configEntries.get(entry));
         }
@@ -546,7 +540,7 @@ public class Tools {
     }
 
     public static List<CEnchantment> getEnchantList(Application app) {
-        List<CEnchantment> list = new ArrayList<CEnchantment>();
+        List<CEnchantment> list = new ArrayList<>();
         for (CEnchantment ce : EnchantManager.getEnchantments())
             if (ce.getApplication() == app)
                 list.add(ce);
@@ -554,7 +548,7 @@ public class Tools {
     }
 
     public static HashSet<CEnchantment> getEnchantList(Application app, Player p) {
-        HashSet<CEnchantment> list = new HashSet<CEnchantment>();
+        HashSet<CEnchantment> list = new HashSet<>();
         for (CEnchantment ce : EnchantManager.getEnchantments())
             if (ce.getApplication() == app)
                 if(!Boolean.parseBoolean(Main.config.getString("Global.Enchantments.RequirePermissions")) || checkPermission(ce, p))
@@ -572,7 +566,7 @@ public class Tools {
             return Application.BOOTS;
         else if (mat.endsWith("HELMET"))
             return Application.HELMET;
-        else if (mat.endsWith("BOOTS") || mat.endsWith("LEGGINGS") || mat.endsWith("CHESTPLATE") || mat.endsWith("HELMET"))
+        else if (mat.endsWith("LEGGINGS") || mat.endsWith("CHESTPLATE"))
             return Application.ARMOR;
         else if (mat.endsWith("PICKAXE") || mat.endsWith("SPADE") || mat.endsWith("AXE") || mat.endsWith("HOE"))
             return Application.TOOL;
@@ -580,16 +574,14 @@ public class Tools {
     }
 
     public static boolean isApplicable(ItemStack i, CEnchantment ce) {
-        if ((ce.getApplication() == Application.ARMOR && ce.getApplication() != Application.GLOBAL
+        return (ce.getApplication() == Application.ARMOR && ce.getApplication() != Application.GLOBAL
                 && (i.getType().toString().endsWith("HELMET") || i.getType().toString().endsWith("CHESTPLATE") || i.getType().toString().endsWith("LEGGINGS")
-                        || i.getType().toString().endsWith("BOOTS")))
+                || i.getType().toString().endsWith("BOOTS")))
                 || (ce.getApplication() == Application.TOOL && (i.getType().toString().endsWith("PICKAXE") || i.getType().toString().endsWith("SPADE") || i.getType().toString().endsWith("_AXE")
-                        || i.getType().toString().endsWith("HOE")))
+                || i.getType().toString().endsWith("HOE")))
                 || (ce.getApplication() == Application.HELMET && ce.getApplication() != Application.GLOBAL && i.getType().toString().endsWith("HELMET"))
                 || (ce.getApplication() == Application.BOOTS && ce.getApplication() != Application.GLOBAL && i.getType().toString().endsWith("BOOTS"))
-                || (ce.getApplication() == Application.BOW && i.getType().equals(Material.BOW)) || ce.getApplication() == Application.GLOBAL)
-            return true;
-        return false;
+                || (ce.getApplication() == Application.BOW && i.getType().equals(Material.BOW)) || ce.getApplication() == Application.GLOBAL;
     }
 
     // Firework
@@ -737,7 +729,7 @@ public class Tools {
             public void run() {
                 if (seconds >= 0) {
                     if (!target.isDead() && target.hasMetadata("ce.bleed")) {
-                        target.damage(1 + (((Damageable) target).getHealth() / 15));
+                        target.damage(1 + (target.getHealth() / 15));
                         seconds--;
                     } else {
                         target.removeMetadata("ce.bleed", Main.plugin);
@@ -749,7 +741,7 @@ public class Tools {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(Main.plugin, 0l, 20l);
+        }.runTaskTimer(Main.plugin, 0L, 20L);
 
     }
 
@@ -784,196 +776,213 @@ public class Tools {
     }
 
     public static List<Location> getLinePlayer(Player player, int length) {
-        List<Location> list = new ArrayList<Location>();
+        List<Location> list = new ArrayList<>();
         for (int amount = length; amount > 0; amount--) {
-            list.add(player.getTargetBlock((Set<Material>) null, amount).getLocation());
+            list.add(player.getTargetBlock(null, amount).getLocation());
         }
         return list;
     }
 
     public static List<Location> getCone(Location loc) {
-        List<Location> locs = new ArrayList<Location>();
+        List<Location> locs = new ArrayList<>();
         String direction = getPlayerDirection(loc);
 
         Location loc1 = loc.clone();
         Location loc2 = loc.clone();
         Location loc3 = loc.clone();
-        if (direction.equals("N")) {
-            loc1.setZ(loc.getZ() - 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() - 2);
-            locs.add(loc2);
-            loc3.setZ(loc.getZ() - 3);
-            locs.add(loc3);
-            Location loc4 = loc2.clone();
-            Location loc5 = loc2.clone();
-            Location loc6 = loc3.clone();
-            Location loc7 = loc3.clone();
-            Location loc8 = loc3.clone();
-            Location loc9 = loc3.clone();
-            loc4.setX(loc2.getX() - 1);
-            locs.add(loc4);
-            loc5.setX(loc2.getX() + 1);
-            locs.add(loc5);
-            loc6.setX(loc3.getX() + 2);
-            locs.add(loc6);
-            loc7.setX(loc3.getX() + 1);
-            locs.add(loc7);
-            loc8.setX(loc3.getX() - 1);
-            locs.add(loc8);
-            loc9.setX(loc3.getX() - 2);
-            locs.add(loc9);
-        } else if (direction.equals("S")) {
-            loc1.setZ(loc.getZ() + 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() + 2);
-            locs.add(loc2);
-            loc3.setZ(loc.getZ() + 3);
-            locs.add(loc3);
-            Location loc4 = loc2.clone();
-            Location loc5 = loc2.clone();
-            Location loc6 = loc3.clone();
-            Location loc7 = loc3.clone();
-            Location loc8 = loc3.clone();
-            Location loc9 = loc3.clone();
-            loc4.setX(loc2.getX() - 1);
-            locs.add(loc4);
-            loc5.setX(loc2.getX() + 1);
-            locs.add(loc5);
-            loc6.setX(loc3.getX() + 2);
-            locs.add(loc6);
-            loc7.setX(loc3.getX() + 1);
-            locs.add(loc7);
-            loc8.setX(loc3.getX() - 1);
-            locs.add(loc8);
-            loc9.setX(loc3.getX() - 2);
-            locs.add(loc9);
-        } else if (direction.equals("E")) {
-            loc1.setX(loc.getX() + 1);
-            locs.add(loc1);
-            loc2.setX(loc1.getX() + 1);
-            locs.add(loc2);
-            loc3.setX(loc2.getX() + 1);
-            locs.add(loc3);
-            Location loc4 = loc2.clone();
-            Location loc5 = loc2.clone();
-            Location loc6 = loc3.clone();
-            Location loc7 = loc3.clone();
-            Location loc8 = loc3.clone();
-            Location loc9 = loc3.clone();
-            loc4.setZ(loc2.getZ() - 1);
-            locs.add(loc4);
-            loc5.setZ(loc2.getZ() + 1);
-            locs.add(loc5);
-            loc6.setZ(loc3.getZ() + 2);
-            locs.add(loc6);
-            loc7.setZ(loc3.getZ() + 1);
-            locs.add(loc7);
-            loc8.setZ(loc3.getZ() - 1);
-            locs.add(loc8);
-            loc9.setZ(loc3.getZ() - 2);
-            locs.add(loc9);
-        } else if (direction.equals("W")) {
-            loc1.setX(loc.getX() - 1);
-            locs.add(loc1);
-            loc2.setX(loc1.getX() - 1);
-            locs.add(loc2);
-            loc3.setX(loc2.getX() - 1);
-            locs.add(loc3);
-            Location loc4 = loc2.clone();
-            Location loc5 = loc2.clone();
-            Location loc6 = loc3.clone();
-            Location loc7 = loc3.clone();
-            Location loc8 = loc3.clone();
-            Location loc9 = loc3.clone();
-            loc4.setZ(loc2.getZ() - 1);
-            locs.add(loc4);
-            loc5.setZ(loc2.getZ() + 1);
-            locs.add(loc5);
-            loc6.setZ(loc3.getZ() + 2);
-            locs.add(loc6);
-            loc7.setZ(loc3.getZ() + 1);
-            locs.add(loc7);
-            loc8.setZ(loc3.getZ() - 1);
-            locs.add(loc8);
-            loc9.setZ(loc3.getZ() - 2);
-            locs.add(loc9);
-        } else if (direction.equals("NW")) {
-            loc1.setZ(loc.getZ() - 1);
-            loc1.setX(loc.getX() - 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() - 2);
-            loc2.setX(loc.getX() - 2);
-            locs.add(loc2);
-            loc3 = loc1.clone();
-            loc3.setZ(loc1.getZ() - 1);
-            locs.add(loc3);
-            Location loc4 = loc1.clone();
-            Location loc5 = loc1.clone();
-            Location loc6 = loc1.clone();
-            loc4.setZ(loc1.getZ() - 2);
-            locs.add(loc4);
-            loc5.setX(loc1.getX() - 1);
-            locs.add(loc5);
-            loc6.setX(loc1.getX() - 2);
-            locs.add(loc6);
-        } else if (direction.equals("NE")) {
-            loc1.setZ(loc.getZ() - 1);
-            loc1.setX(loc.getX() + 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() - 2);
-            loc2.setX(loc.getX() + 2);
-            locs.add(loc2);
-            loc3 = loc1.clone();
-            loc3.setZ(loc1.getZ() - 1);
-            locs.add(loc3);
-            Location loc4 = loc1.clone();
-            Location loc5 = loc1.clone();
-            Location loc6 = loc1.clone();
-            loc4.setZ(loc1.getZ() - 2);
-            locs.add(loc4);
-            loc5.setX(loc1.getX() + 1);
-            locs.add(loc5);
-            loc6.setX(loc1.getX() + 2);
-            locs.add(loc6);
-        } else if (direction.equals("SW")) {
-            loc1.setZ(loc.getZ() + 1);
-            loc1.setX(loc.getX() - 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() + 2);
-            loc2.setX(loc.getX() - 2);
-            locs.add(loc2);
-            loc3 = loc1.clone();
-            Location loc4 = loc1.clone();
-            Location loc5 = loc1.clone();
-            Location loc6 = loc1.clone();
-            loc3.setZ(loc1.getZ() + 1);
-            locs.add(loc3);
-            loc4.setZ(loc1.getZ() + 2);
-            locs.add(loc4);
-            loc5.setX(loc1.getX() - 1);
-            locs.add(loc5);
-            loc6.setX(loc1.getX() - 2);
-            locs.add(loc6);
-        } else if (direction.equals("SE")) {
-            loc1.setZ(loc.getZ() + 1);
-            loc1.setX(loc.getX() + 1);
-            locs.add(loc1);
-            loc2.setZ(loc.getZ() + 2);
-            loc2.setX(loc.getX() + 2);
-            locs.add(loc2);
-            loc3 = loc1.clone();
-            loc3.setZ(loc1.getZ() + 1);
-            locs.add(loc3);
-            Location loc4 = loc1.clone();
-            Location loc5 = loc1.clone();
-            Location loc6 = loc1.clone();
-            loc4.setZ(loc1.getZ() + 2);
-            locs.add(loc4);
-            loc5.setX(loc1.getX() + 1);
-            locs.add(loc5);
-            loc6.setX(loc1.getX() + 2);
-            locs.add(loc6);
+        switch (direction) {
+            case "N": {
+                loc1.setZ(loc.getZ() - 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() - 2);
+                locs.add(loc2);
+                loc3.setZ(loc.getZ() - 3);
+                locs.add(loc3);
+                Location loc4 = loc2.clone();
+                Location loc5 = loc2.clone();
+                Location loc6 = loc3.clone();
+                Location loc7 = loc3.clone();
+                Location loc8 = loc3.clone();
+                Location loc9 = loc3.clone();
+                loc4.setX(loc2.getX() - 1);
+                locs.add(loc4);
+                loc5.setX(loc2.getX() + 1);
+                locs.add(loc5);
+                loc6.setX(loc3.getX() + 2);
+                locs.add(loc6);
+                loc7.setX(loc3.getX() + 1);
+                locs.add(loc7);
+                loc8.setX(loc3.getX() - 1);
+                locs.add(loc8);
+                loc9.setX(loc3.getX() - 2);
+                locs.add(loc9);
+                break;
+            }
+            case "S": {
+                loc1.setZ(loc.getZ() + 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() + 2);
+                locs.add(loc2);
+                loc3.setZ(loc.getZ() + 3);
+                locs.add(loc3);
+                Location loc4 = loc2.clone();
+                Location loc5 = loc2.clone();
+                Location loc6 = loc3.clone();
+                Location loc7 = loc3.clone();
+                Location loc8 = loc3.clone();
+                Location loc9 = loc3.clone();
+                loc4.setX(loc2.getX() - 1);
+                locs.add(loc4);
+                loc5.setX(loc2.getX() + 1);
+                locs.add(loc5);
+                loc6.setX(loc3.getX() + 2);
+                locs.add(loc6);
+                loc7.setX(loc3.getX() + 1);
+                locs.add(loc7);
+                loc8.setX(loc3.getX() - 1);
+                locs.add(loc8);
+                loc9.setX(loc3.getX() - 2);
+                locs.add(loc9);
+                break;
+            }
+            case "E": {
+                loc1.setX(loc.getX() + 1);
+                locs.add(loc1);
+                loc2.setX(loc1.getX() + 1);
+                locs.add(loc2);
+                loc3.setX(loc2.getX() + 1);
+                locs.add(loc3);
+                Location loc4 = loc2.clone();
+                Location loc5 = loc2.clone();
+                Location loc6 = loc3.clone();
+                Location loc7 = loc3.clone();
+                Location loc8 = loc3.clone();
+                Location loc9 = loc3.clone();
+                loc4.setZ(loc2.getZ() - 1);
+                locs.add(loc4);
+                loc5.setZ(loc2.getZ() + 1);
+                locs.add(loc5);
+                loc6.setZ(loc3.getZ() + 2);
+                locs.add(loc6);
+                loc7.setZ(loc3.getZ() + 1);
+                locs.add(loc7);
+                loc8.setZ(loc3.getZ() - 1);
+                locs.add(loc8);
+                loc9.setZ(loc3.getZ() - 2);
+                locs.add(loc9);
+                break;
+            }
+            case "W": {
+                loc1.setX(loc.getX() - 1);
+                locs.add(loc1);
+                loc2.setX(loc1.getX() - 1);
+                locs.add(loc2);
+                loc3.setX(loc2.getX() - 1);
+                locs.add(loc3);
+                Location loc4 = loc2.clone();
+                Location loc5 = loc2.clone();
+                Location loc6 = loc3.clone();
+                Location loc7 = loc3.clone();
+                Location loc8 = loc3.clone();
+                Location loc9 = loc3.clone();
+                loc4.setZ(loc2.getZ() - 1);
+                locs.add(loc4);
+                loc5.setZ(loc2.getZ() + 1);
+                locs.add(loc5);
+                loc6.setZ(loc3.getZ() + 2);
+                locs.add(loc6);
+                loc7.setZ(loc3.getZ() + 1);
+                locs.add(loc7);
+                loc8.setZ(loc3.getZ() - 1);
+                locs.add(loc8);
+                loc9.setZ(loc3.getZ() - 2);
+                locs.add(loc9);
+                break;
+            }
+            case "NW": {
+                loc1.setZ(loc.getZ() - 1);
+                loc1.setX(loc.getX() - 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() - 2);
+                loc2.setX(loc.getX() - 2);
+                locs.add(loc2);
+                loc3 = loc1.clone();
+                loc3.setZ(loc1.getZ() - 1);
+                locs.add(loc3);
+                Location loc4 = loc1.clone();
+                Location loc5 = loc1.clone();
+                Location loc6 = loc1.clone();
+                loc4.setZ(loc1.getZ() - 2);
+                locs.add(loc4);
+                loc5.setX(loc1.getX() - 1);
+                locs.add(loc5);
+                loc6.setX(loc1.getX() - 2);
+                locs.add(loc6);
+                break;
+            }
+            case "NE": {
+                loc1.setZ(loc.getZ() - 1);
+                loc1.setX(loc.getX() + 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() - 2);
+                loc2.setX(loc.getX() + 2);
+                locs.add(loc2);
+                loc3 = loc1.clone();
+                loc3.setZ(loc1.getZ() - 1);
+                locs.add(loc3);
+                Location loc4 = loc1.clone();
+                Location loc5 = loc1.clone();
+                Location loc6 = loc1.clone();
+                loc4.setZ(loc1.getZ() - 2);
+                locs.add(loc4);
+                loc5.setX(loc1.getX() + 1);
+                locs.add(loc5);
+                loc6.setX(loc1.getX() + 2);
+                locs.add(loc6);
+                break;
+            }
+            case "SW": {
+                loc1.setZ(loc.getZ() + 1);
+                loc1.setX(loc.getX() - 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() + 2);
+                loc2.setX(loc.getX() - 2);
+                locs.add(loc2);
+                loc3 = loc1.clone();
+                Location loc4 = loc1.clone();
+                Location loc5 = loc1.clone();
+                Location loc6 = loc1.clone();
+                loc3.setZ(loc1.getZ() + 1);
+                locs.add(loc3);
+                loc4.setZ(loc1.getZ() + 2);
+                locs.add(loc4);
+                loc5.setX(loc1.getX() - 1);
+                locs.add(loc5);
+                loc6.setX(loc1.getX() - 2);
+                locs.add(loc6);
+                break;
+            }
+            case "SE": {
+                loc1.setZ(loc.getZ() + 1);
+                loc1.setX(loc.getX() + 1);
+                locs.add(loc1);
+                loc2.setZ(loc.getZ() + 2);
+                loc2.setX(loc.getX() + 2);
+                locs.add(loc2);
+                loc3 = loc1.clone();
+                loc3.setZ(loc1.getZ() + 1);
+                locs.add(loc3);
+                Location loc4 = loc1.clone();
+                Location loc5 = loc1.clone();
+                Location loc6 = loc1.clone();
+                loc4.setZ(loc1.getZ() + 2);
+                locs.add(loc4);
+                loc5.setX(loc1.getX() + 1);
+                locs.add(loc5);
+                loc6.setX(loc1.getX() + 2);
+                locs.add(loc6);
+                break;
+            }
         }
 
         return locs;

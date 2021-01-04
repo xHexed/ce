@@ -33,7 +33,7 @@ public class Block extends CEnchantment {
 		EffectManager.playSound(event.getPlayer().getLocation(), "BLOCK_ANVIL_LAND", 0.8f, 1);
 		new BukkitRunnable() {
 
-			PotionEffect	resistance	= new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20, strength + level);
+			final PotionEffect	resistance	= new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20, strength + level);
 
 			@Override
 			public void run() {
@@ -44,7 +44,7 @@ public class Block extends CEnchantment {
 					this.cancel();
 				}
 			}
-		}.runTaskTimer(getPlugin(), 0l, 15l);
+		}.runTaskTimer(getPlugin(), 0L, 15L);
 	}
 
 	@Override

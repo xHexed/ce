@@ -37,11 +37,11 @@ public abstract class CItem extends CBasic {
 
     private enum ItemType {
         NORMAL, ARMORSET, MINE
-    };
+    }
 
     private boolean hasRetriedConfig = false;
 
-    private Material itemMaterial;
+    private final Material itemMaterial;
     private List<String> description;
     private long cooldownTime;
     private ChatColor itemColor;
@@ -85,7 +85,7 @@ public abstract class CItem extends CBasic {
         this.itemMaterial = mat;
         this.originalName = originalName;
         this.permissionName = originalName.replace(" ", "").replace("'", "");
-        this.description = new ArrayList<String>(Arrays.asList(lDescription.split(";")));
+        this.description = new ArrayList<>(Arrays.asList(lDescription.split(";")));
         
         this.configEntries.put("Enabled", true);
         this.configEntries.put("DisplayName", originalName);
@@ -98,9 +98,7 @@ public abstract class CItem extends CBasic {
     // Cooldown
 
     public boolean getHasCooldown(Player p) {
-        if (cooldown.contains(p))
-            return true;
-        return false;
+        return cooldown.contains(p);
     }
 
     public void generateCooldown(final Player p, long cooldownT) {
@@ -140,7 +138,7 @@ public abstract class CItem extends CBasic {
             this.itemColor = ChatColor.AQUA;
         }
         this.displayName = itemColor + Main.config.getString("Items." + getOriginalName() + ".DisplayName");
-        this.description = new ArrayList<String>(Arrays.asList(Main.config.getString("Items." + getOriginalName() + ".Description").split(";")));
+        this.description = new ArrayList<>(Arrays.asList(Main.config.getString("Items." + getOriginalName() + ".Description").split(";")));
         this.cooldownTime = Long.parseLong(Main.config.getString("Items." + getOriginalName() + ".Cooldown"));
         this.cost = Double.parseDouble(Main.config.getString("Items." + getOriginalName() + ".Cost"));
 

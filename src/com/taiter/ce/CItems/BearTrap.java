@@ -65,7 +65,7 @@ public class BearTrap extends CItem {
 			b.getRelative(0,1,0).setMetadata("ce.mine.secondary", new FixedMetadataValue(main, coord));
 		} else if(event instanceof PlayerMoveEvent) {
 			
-			World w = player.getWorld();;
+			World w = player.getWorld();
 			w.playEffect(player.getLocation(), Effect.CLICK1, 5);
 			w.playEffect(player.getLocation(), Effect.ZOMBIE_CHEW_IRON_DOOR, 10);
 			

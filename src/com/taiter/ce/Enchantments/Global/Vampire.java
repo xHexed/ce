@@ -29,16 +29,10 @@ public class Vampire extends CEnchantment {
 		EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
 		Player damager = (Player) event.getDamager();
 		if (!getHasCooldown(damager)) {	
-			double heal = (((Damageable) damager).getHealth() + (event.getDamage() / damageHealFraction));
-			if ( heal < ((Damageable) damager).getMaxHealth()) 
-				damager.setHealth(heal);
-			 else 
-				damager.setHealth(((Damageable) damager).getMaxHealth());
+			double heal = (damager.getHealth() + (event.getDamage() / damageHealFraction));
+			damager.setHealth(Math.min(heal, damager.getMaxHealth()));
 			int food = (int) (damager.getFoodLevel() + (event.getDamage() / damageHealFraction));
-			if ( food < 20) 
-				damager.setFoodLevel(food);
-			 else 
-				damager.setFoodLevel(20);
+			damager.setFoodLevel(Math.min(food, 20));
 			EffectManager.playSound(damager.getLocation(), "ENTITY_PLAYER_BURP", 0.4f, 1f);
 			generateCooldown(damager, cooldown);
 		}

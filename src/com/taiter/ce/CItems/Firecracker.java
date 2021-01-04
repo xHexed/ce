@@ -95,7 +95,7 @@ public class Firecracker extends CItem {
 				public void run() {
 					fw.detonate();
 				}
-			}.runTaskLater(getPlugin(), 1l);
+			}.runTaskLater(getPlugin(), 1L);
 		}
 		return false;
 	}

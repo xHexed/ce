@@ -43,8 +43,8 @@ import org.bukkit.util.Vector;
 
 public class HookshotBow extends CItem {
 
-	String	PushLine	= ChatColor.DARK_GRAY + "Mode: Push";
-	String	PullLine	= ChatColor.DARK_GRAY + "Mode: Pull";
+	final String	PushLine	= ChatColor.DARK_GRAY + "Mode: Push";
+	final String	PullLine	= ChatColor.DARK_GRAY + "Mode: Pull";
 	
 	
 
@@ -60,7 +60,7 @@ public class HookshotBow extends CItem {
 		if(event instanceof PlayerInteractEvent) {
 				ItemStack item = player.getItemInHand();
 				ItemMeta im = item.getItemMeta();
-				List<String> lore = new ArrayList<String>();
+				List<String> lore = new ArrayList<>();
 				if(im.hasLore())
 					lore =  im.getLore();
 				player.getWorld().playEffect(player.getLocation(), Effect.CLICK1, 10);

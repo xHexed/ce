@@ -128,7 +128,7 @@ public class Minigun extends CItem {
 					this.cancel();
 					
 				}
-			}.runTaskTimer(main, 0l, 20/ShotsPerSecond);
+			}.runTaskTimer(main, 0L, 20/ShotsPerSecond);
 			
 			return true;
 		

@@ -56,7 +56,7 @@ public class Headless extends CEnchantment {
                     EffectManager.playSound(player.getLocation(), "BLOCK_ANVIL_LAND", 0.1f, 1.5f);
                 }
             }
-        }.runTaskLater(getPlugin(), 5l);
+        }.runTaskLater(getPlugin(), 5L);
 
     }
 

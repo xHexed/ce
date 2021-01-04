@@ -103,7 +103,7 @@ public class Powergloves extends CItem {
 							  this.cancel();
 						  }
 						}
-					}.runTaskTimer(main, 0l, 10l);
+					}.runTaskTimer(main, 0L, 10L);
 				}
 		} else if(event instanceof PlayerInteractEvent) {
 			if(player.hasMetadata("ce." + getOriginalName()) && player.getMetadata("ce." + getOriginalName()).get(0).asBoolean())

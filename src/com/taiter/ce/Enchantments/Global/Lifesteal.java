@@ -56,12 +56,9 @@ public class Lifesteal extends CEnchantment {
 		if(damager.getGameMode().equals(GameMode.CREATIVE))
 			return;
 		
-		double newHeal = ((Damageable) damager).getHealth() + heal + level;
+		double newHeal = damager.getHealth() + heal + level;
 
-		if(newHeal < ((Damageable) damager).getMaxHealth())
-			damager.setHealth(newHeal);
-		else
-			damager.setHealth(((Damageable) damager).getMaxHealth());
+		damager.setHealth(Math.min(newHeal, damager.getMaxHealth()));
 		
 		EffectManager.playSound(damager.getLocation(), "ENTITY_EXPERIENCE_ORB_PICKUP", 0.3f, 1f);
 

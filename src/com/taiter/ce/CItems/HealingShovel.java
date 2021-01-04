@@ -48,11 +48,7 @@ public class HealingShovel extends CItem {
             EffectManager.playSound(damaged.getLocation(), "BLOCK_ANVIL_LAND", 0.5f, 2f);
             short currentDur = player.getItemInHand().getDurability();
 
-            if (((Damageable) damaged).getHealth() + Heal <= ((Damageable) damaged).getMaxHealth()) {
-                damaged.setHealth(((Damageable) damaged).getHealth() + Heal);
-            } else {
-                damaged.setHealth(((Damageable) damaged).getMaxHealth());
-            }
+            damaged.setHealth(Math.min(damaged.getHealth() + Heal, damaged.getMaxHealth()));
 
             if (currentDur + Heal < player.getItemInHand().getType().getMaxDurability()) {
                 player.getItemInHand().setDurability((short) (currentDur + Heal));

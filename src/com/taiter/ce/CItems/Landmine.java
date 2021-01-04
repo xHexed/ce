@@ -58,7 +58,7 @@ public class Landmine extends CItem {
 			b.getRelative(0,1,0).setMetadata("ce.mine.secondary", new FixedMetadataValue(main, coord));
 		} else if(event instanceof PlayerMoveEvent) {
 			
-			World w = player.getWorld();;
+			World w = player.getWorld();
 			w.playEffect(player.getLocation(), Effect.CLICK1, 5);
 			
 			String[] s = player.getMetadata("ce.mine").get(0).asString().split(" ");

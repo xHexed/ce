@@ -56,7 +56,7 @@ public class BeastmastersBow extends CItem {
 	int MobAppearanceChance;
 	int MaximumMobs;
 	
-	Random rand;
+	final Random rand;
 
 	public BeastmastersBow(String originalName, ChatColor color, String lDescription, long lCooldown, Material mat) {
 		super(originalName, color, lDescription, lCooldown, mat);

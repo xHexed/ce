@@ -145,7 +145,7 @@ public final class Main extends JavaPlugin {
         commandC = new CeCommand(this);
         classLoader = this.getClassLoader();
 
-        items = new HashSet<CItem>();
+        items = new HashSet<>();
 
         //Load/Create config
         this.saveDefaultConfig();
@@ -203,7 +203,7 @@ public final class Main extends JavaPlugin {
         currentVersion = plugin.getDescription().getVersion();
         try {
             updateListURL = new URL("https://api.curseforge.com/servermods/files?projectIds=54406");
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException ignored) {
         }
 
         if (Boolean.parseBoolean(config.getString("Global.Updates.CheckOnStartup"))) {
@@ -251,8 +251,8 @@ public final class Main extends JavaPlugin {
             double versionNew;
             double versionCurrent;
 
-            Boolean newHasSubVersion = false;
-            Boolean currentHasSubVersion = false;
+            boolean newHasSubVersion = false;
+            boolean currentHasSubVersion = false;
 
             try {
                 versionNew = Double.parseDouble(newVersion);
@@ -297,7 +297,7 @@ public final class Main extends JavaPlugin {
 
         try {
 
-            Boolean notify = Boolean.parseBoolean(config.getString("Global.Updates.UpdateNotifications"));
+            boolean notify = Boolean.parseBoolean(config.getString("Global.Updates.UpdateNotifications"));
 
             int updateSize = updateDownloadURL.openConnection().getContentLength();
             File file = new File(plugin.getDataFolder().getParent(), "CustomEnchantments.jar");
@@ -339,7 +339,7 @@ public final class Main extends JavaPlugin {
                     input.close();
                 if (output != null)
                     output.close();
-            } catch (IOException ex) {
+            } catch (IOException ignored) {
             }
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CE] Updating to Version " + newVersion + " failed");
         }
@@ -360,21 +360,17 @@ public final class Main extends JavaPlugin {
 
         byte[] result = md.digest();
 
-        String md5 = "";
+        StringBuilder md5 = new StringBuilder();
 
-        for (int i = 0; i < result.length; i++)
-            md5 += Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1);
+        for (byte b : result) md5.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 
-        if (md5.equals(newMD5))
-            return true;
-
-        return false;
+        return md5.toString().equals(newMD5);
     }
     // UPDATER
 
     public static WorldGuardPlugin getWorldGuard() {
         Plugin worldguard = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-        if (worldguard != null && worldguard instanceof WorldGuardPlugin && worldguard.isEnabled())
+        if (worldguard instanceof WorldGuardPlugin && worldguard.isEnabled())
             return (WorldGuardPlugin) worldguard;
         return null;
     }
@@ -396,26 +392,26 @@ public final class Main extends JavaPlugin {
     }
 
     public static String resolveEnchantmentColor() {
-        String color = Main.plugin.getConfig().getString("Global.Enchantments.CEnchantmentColor");
-        if (color.contains(";")) {
-            String[] temp = color.split(";");
-            color = "";
+        StringBuilder color = new StringBuilder(Main.plugin.getConfig().getString("Global.Enchantments.CEnchantmentColor"));
+        if (color.toString().contains(";")) {
+            String[] temp = color.toString().split(";");
+            color = new StringBuilder();
             for (String c : temp)
                 try {
-                    color += ChatColor.valueOf(c.toUpperCase());
+                    color.append(ChatColor.valueOf(c.toUpperCase()));
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "[CE] ERROR: The ChatColor '" + c
                             + "' was not found, please check the list of Bukkit ChatColors and update the ChatColor Section. The ChatColor will be ignored to ensure that CE is still working.");
                 }
         } else {
             try {
-                color = ChatColor.valueOf(Main.config.getString("Global.Enchantments.CEnchantmentColor").toUpperCase()).toString();
+                color = new StringBuilder(ChatColor.valueOf(Main.config.getString("Global.Enchantments.CEnchantmentColor").toUpperCase()).toString());
             } catch (Exception e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "[CE] ERROR: The ChatColor '" + color
                         + "' was not found, please check the list of Bukkit ChatColors and update the ChatColor Section. The ChatColor will be ignored to ensure that CE is still working.");
             }
         }
-        return color;
+        return color.toString();
     }
 
     private void writePermissions() {
@@ -516,7 +512,7 @@ public final class Main extends JavaPlugin {
                             className = className.replaceAll("\\\\", ".");
                         }
                         EnchantManager.getEnchantments().add((CEnchantment) classLoader.loadClass(className).getDeclaredConstructor(Application.class).newInstance(app));
-                    } catch (ClassNotFoundException e) {
+                    } catch (ClassNotFoundException ignored) {
                     } // Checked exception, should never be thrown
             }
 
@@ -538,7 +534,7 @@ public final class Main extends JavaPlugin {
         // --------------------------------------------------------------------------------
 
         if (finalize)
-            for (CEnchantment ce : new HashSet<CEnchantment>(EnchantManager.getEnchantments()))
+            for (CEnchantment ce : new HashSet<>(EnchantManager.getEnchantments()))
                 ce.finalizeEnchantment();
 
         if (printSuccess)
@@ -617,8 +613,8 @@ public final class Main extends JavaPlugin {
     }
 
     private static void deleteInactive() {
-        Set<CEnchantment> e = new LinkedHashSet<CEnchantment>(EnchantManager.getEnchantments());
-        Set<CItem> i = new LinkedHashSet<CItem>(items);
+        Set<CEnchantment> e = new LinkedHashSet<>(EnchantManager.getEnchantments());
+        Set<CItem> i = new LinkedHashSet<>(items);
         for (CEnchantment ce : e) {
             if (!Boolean.parseBoolean(config.getString("Enchantments." + ce.getOriginalName() + ".Enabled"))) {
                 EnchantManager.getEnchantments().remove(ce);
@@ -638,7 +634,7 @@ public final class Main extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("ce") || cmd.getName().equalsIgnoreCase("customenchantments")) {
             String result = commandC.processCommand(sender, args);
-            if (result != "")
+            if (!result.equals(""))
                 sender.sendMessage(result);
             return true;
         }

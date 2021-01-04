@@ -52,7 +52,7 @@ public class Bandage extends CItem {
 	@Override
 	public boolean effect(Event event, Player player) {
 		if(event instanceof PlayerInteractEvent) {
-				if(((Damageable) player).getHealth() != ((Damageable) player).getMaxHealth()) {
+				if(player.getHealth() != player.getMaxHealth()) {
 					heal(player);
 					return true;
 				} else
@@ -72,7 +72,7 @@ public class Bandage extends CItem {
 			
 			if(toHeal != null) {
 			  if(!toHeal.hasMetadata("ce." + getOriginalName()))
-				if(((Damageable) toHeal).getHealth() != ((Damageable) toHeal).getMaxHealth()) {
+				if(toHeal.getHealth() != toHeal.getMaxHealth()) {
 					heal(toHeal);
 					player.sendMessage(ChatColor.GREEN + "You have applied a bandage on " + toHeal.getName() + ".");
 					toHeal.sendMessage(ChatColor.GREEN + player.getName() + " has applied a bandage on you.");
@@ -104,21 +104,18 @@ public class Bandage extends CItem {
 			@Override
 			public void run() {
 				if(!p.isDead() && localCounter != 0) {
-					if(((Damageable) p).getHealth() == ((Damageable) p).getMaxHealth() && StopAtFullHealth) {
+					if(p.getHealth() == p.getMaxHealth() && StopAtFullHealth) {
 						p.sendMessage(ChatColor.GREEN + "Your wounds have fully recovered.");
 						this.cancel();
 					}
-					if(((Damageable) p).getHealth() + healBursts <= ((Damageable) p).getMaxHealth())
-						p.setHealth(((Damageable) p).getHealth() + healBursts);
-					else
-						p.setHealth(((Damageable) p).getMaxHealth());
+					p.setHealth(Math.min(p.getHealth() + healBursts, p.getMaxHealth()));
 				localCounter--;
 				} else {
 					p.sendMessage(ChatColor.GREEN + "The bandage has recovered some of your wounds.");
 					this.cancel();
 				}
 			}
-		}.runTaskTimer(main, 0l, 20l);
+		}.runTaskTimer(main, 0L, 20L);
 	}
 
 }

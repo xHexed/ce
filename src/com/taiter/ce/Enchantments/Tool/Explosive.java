@@ -19,7 +19,6 @@ package com.taiter.ce.Enchantments.Tool;
 */
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.taiter.ce.ExplodeEnchantmentEvent;
@@ -57,7 +56,7 @@ public class Explosive extends CEnchantment {
         if (!isUsable(player.getItemInHand().getType().toString(), event.getBlock().getType().toString()))
             return;
 
-        List<Location> locations = new ArrayList<Location>();
+        List<Location> locations = new ArrayList<>();
 
         int locRad = Radius;
         if (LargerRadius && Tools.random.nextInt(100) < level * 5)

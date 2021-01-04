@@ -30,7 +30,7 @@ import com.taiter.ce.Enchantments.CEnchantment;
 
 public class Piercing extends CEnchantment {
 
-    private ItemStack[] emptyArmor = new ItemStack[4];
+    private final ItemStack[] emptyArmor = new ItemStack[4];
 
     public Piercing(Application app) {
         super(app);

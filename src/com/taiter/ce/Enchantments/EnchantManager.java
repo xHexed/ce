@@ -1,12 +1,7 @@
 package com.taiter.ce.Enchantments;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -36,8 +31,8 @@ import com.taiter.ce.Main;
 
 public class EnchantManager {
 
-    private static Set<CEnchantment> enchantments = new LinkedHashSet<CEnchantment>();
-    private static Enchantment glowEnchantment;
+    private static final Set<CEnchantment> enchantments = new LinkedHashSet<>();
+    private static final Enchantment glowEnchantment;
     private static int maxEnchants = -1;
 
     private static String lorePrefix;
@@ -58,20 +53,20 @@ public class EnchantManager {
             else
                 id = Enchantment.values()[Enchantment.values().length - 1].getId() + 1;
 
-        Boolean forced = false;
+        boolean forced = false;
         if (!Enchantment.isAcceptingRegistrations()) //Allow new enchantments to be registered again
             try {
                 Field f = Enchantment.class.getDeclaredField("acceptingNew");
                 f.setAccessible(true);
                 f.set(null, true);
                 forced = true;
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
 
         try {
             glow = new GlowEnchantment(100);
             Enchantment.registerEnchantment(glow);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
 
         if (forced) //Revert change
@@ -79,7 +74,7 @@ public class EnchantManager {
                 Field f = Enchantment.class.getDeclaredField("acceptingNew");
                 f.set(null, false);
                 f.setAccessible(false);
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         return glow;
     }
@@ -90,7 +85,7 @@ public class EnchantManager {
 
     public static ItemStack addEnchant(ItemStack item, CEnchantment ce, int level) {
         ItemMeta im = item.getItemMeta();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         if (im.hasLore()) {
             lore = im.getLore();
             if (maxEnchants < enchantments.size()) {
@@ -115,7 +110,7 @@ public class EnchantManager {
 
     public static ItemStack addEnchantments(ItemStack item, HashMap<CEnchantment, Integer> list) {
         ItemMeta im = item.getItemMeta();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         if (im.hasLore()) {
             lore = im.getLore();
             if (maxEnchants < enchantments.size()) {
@@ -191,12 +186,9 @@ public class EnchantManager {
                     String[] split = name.split(" ");
                     if (split.length == enchantment.split(" ").length + 1) {
                         name = name.substring(0, name.length() - 1 - split[split.length - 1].length());
-                        if (name.equals(enchantment) || name.equals(ce.getOriginalName()))
-                            return ce;
-                    } else {
-                        if (name.equals(enchantment) || name.equals(ce.getOriginalName()))
-                            return ce;
                     }
+                    if (name.equals(enchantment) || name.equals(ce.getOriginalName()))
+                        return ce;
                 }
             }
         return null;
@@ -207,7 +199,7 @@ public class EnchantManager {
     }
 
     public static Set<CEnchantment> getEnchantments(List<String> lore) {
-        Set<CEnchantment> list = new LinkedHashSet<CEnchantment>();
+        Set<CEnchantment> list = new LinkedHashSet<>();
         if (lore != null)
             for (String name : lore)
                 if (name.length() > 3)
@@ -225,7 +217,7 @@ public class EnchantManager {
     }
 
     public static HashMap<CEnchantment, Integer> getEnchantmentLevels(List<String> lore) {
-        HashMap<CEnchantment, Integer> list = new HashMap<CEnchantment, Integer>();
+        HashMap<CEnchantment, Integer> list = new HashMap<>();
         if (lore != null)
             for (String name : lore)
                 if (name.length() > 3)
@@ -253,8 +245,7 @@ public class EnchantManager {
 
     public static boolean isEnchantmentBook(ItemStack i) {
         if (i != null && i.getType().equals(Material.ENCHANTED_BOOK))
-            if (i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().getDisplayName().equals(enchantBookName))
-                return true;
+            return i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().getDisplayName().equals(enchantBookName);
         return false;
     }
 
@@ -262,10 +253,8 @@ public class EnchantManager {
         if (mat.contains("HELMET") || mat.contains("CHESTPLATE") || mat.contains("LEGGINGS") || mat.contains("BOOTS") || mat.contains("SWORD") || mat.contains("PICKAXE") || mat.contains("AXE")
                 || mat.contains("SPADE") || mat.contains("HOE") || mat.equals("BOW"))
             return true;
-        if ((Main.config.getBoolean("Global.Runecrafting.Disenchanting") && mat.equals("BOOK"))
-                || ((Main.config.getBoolean("Global.Runecrafting.CanStackEnchantments") && mat.equals("ENCHANTED_BOOK"))))
-            return true;
-        return false;
+        return (Main.config.getBoolean("Global.Runecrafting.Disenchanting") && mat.equals("BOOK"))
+                || ((Main.config.getBoolean("Global.Runecrafting.CanStackEnchantments") && mat.equals("ENCHANTED_BOOK")));
     }
 
     public static Boolean containsEnchantment(List<String> toTest) {
@@ -302,9 +291,7 @@ public class EnchantManager {
             return false;
         String nextTest = toTest.replace(next, "");
 
-        if (nextTest.startsWith(" ") || nextTest.isEmpty())
-            return true;
-        return false;
+        return nextTest.startsWith(" ") || nextTest.isEmpty();
     }
 
     public static String getLorePrefix() {
@@ -361,24 +348,35 @@ public class EnchantManager {
         level = level.toUpperCase();
         int intLevel = 1;
 
-        if (level.equals("II"))
-            intLevel = 2;
-        else if (level.equals("III"))
-            intLevel = 3;
-        else if (level.equals("IV"))
-            intLevel = 4;
-        else if (level.equals("V"))
-            intLevel = 5;
-        else if (level.equals("VI"))
-            intLevel = 6;
-        else if (level.equals("VII"))
-            intLevel = 7;
-        else if (level.equals("VIII"))
-            intLevel = 8;
-        else if (level.equals("IX"))
-            intLevel = 9;
-        else if (level.equals("X"))
-            intLevel = 10;
+        switch (level) {
+            case "II":
+                intLevel = 2;
+                break;
+            case "III":
+                intLevel = 3;
+                break;
+            case "IV":
+                intLevel = 4;
+                break;
+            case "V":
+                intLevel = 5;
+                break;
+            case "VI":
+                intLevel = 6;
+                break;
+            case "VII":
+                intLevel = 7;
+                break;
+            case "VIII":
+                intLevel = 8;
+                break;
+            case "IX":
+                intLevel = 9;
+                break;
+            case "X":
+                intLevel = 10;
+                break;
+        }
 
         return intLevel;
     }
@@ -394,7 +392,7 @@ public class EnchantManager {
     public static ItemStack getEnchantBook(CEnchantment ce, int level) {
         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta im = item.getItemMeta();
-        im.setLore(Arrays.asList(new String[] { lorePrefix + ce.getDisplayName() + " " + intToLevel(level) }));
+        im.setLore(Collections.singletonList(lorePrefix + ce.getDisplayName() + " " + intToLevel(level)));
         im.setDisplayName(enchantBookName);
         item.setItemMeta(im);
         item.addUnsafeEnchantment(glowEnchantment, 0);
@@ -404,7 +402,7 @@ public class EnchantManager {
     public static ItemStack getEnchantBook(HashMap<CEnchantment, Integer> list) {
         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta im = item.getItemMeta();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         for (CEnchantment ce : list.keySet()) {
             lore.add(lorePrefix + ce.getDisplayName() + " " + intToLevel(list.get(ce)));
         }

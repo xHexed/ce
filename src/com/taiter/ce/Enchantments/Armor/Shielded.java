@@ -40,7 +40,7 @@ public class Shielded extends CEnchantment {
 
     static {
         try {
-            getAbsorptionHearts = ReflectionHelper.getNMSClass("EntityHuman").getDeclaredMethod("getAbsorptionHearts", new Class[0]);
+            getAbsorptionHearts = ReflectionHelper.getNMSClass("EntityHuman").getDeclaredMethod("getAbsorptionHearts");
             setAbsorptionHearts = ReflectionHelper.getNMSClass("EntityHuman").getDeclaredMethod("setAbsorptionHearts", float.class);
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();

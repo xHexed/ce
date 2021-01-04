@@ -75,7 +75,7 @@ public class Flamethrower extends CItem {
 							player.getItemInHand().setDurability((short) (player.getItemInHand().getDurability() - 1));
 						}
 					}
-				}.runTaskTimer(main, 0l, 2l);
+				}.runTaskTimer(main, 0L, 2L);
 			} else { 
 				player.getItemInHand().setType(Material.AIR);
 			}
@@ -107,7 +107,7 @@ public class Flamethrower extends CItem {
 							}
 						}
 						}
-					}.runTaskTimer(main, 0l, 1l);
+					}.runTaskTimer(main, 0L, 1L);
 				}
 				new BukkitRunnable() {
 					@Override
@@ -119,7 +119,7 @@ public class Flamethrower extends CItem {
 							}
 						}
 					}
-				}.runTaskLater(main, 200l);
+				}.runTaskLater(main, 200L);
 				player.getWorld().playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 30);
 				if(!player.getGameMode().equals(GameMode.CREATIVE)) {
 				player.getItemInHand().setDurability((short) (player.getItemInHand().getDurability() + 1));
@@ -138,7 +138,7 @@ public class Flamethrower extends CItem {
 	}
 	
 	public List<Location> getLinePlayer(Player player, int length) {
-		List<Location> list = new ArrayList<Location>();
+		List<Location> list = new ArrayList<>();
 		Vector direction = player.getLocation().getDirection();
 		Location cLoc = player.getLocation().add(0, 1, 0); //Current location
 		for(int amount = length; amount > 0; amount --) {

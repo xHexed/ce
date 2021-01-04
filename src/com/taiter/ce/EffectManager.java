@@ -84,7 +84,7 @@ public class EffectManager {
     private static Constructor<?> effectConstructor;
     private static Object[] particles;
 
-    public EffectManager() {
+    static  {
         try {
             effectConstructor = ReflectionHelper.getEffectPacketConstructor();
             particles = (Object[]) ReflectionHelper.loadEnumParticleValues();
@@ -103,7 +103,7 @@ public class EffectManager {
         } catch (IllegalArgumentException ex) {
             try {
                 //Try to resolve the 1.8 Sounds
-                s = Sound.valueOf(sound.substring(sound.indexOf("_") + 1, sound.length()).replace("_AMBIENT", "").replace("GENERIC_", "").replace("EXPERIENCE_", "").replace("PLAYER_", ""));
+                s = Sound.valueOf(sound.substring(sound.indexOf("_") + 1).replace("_AMBIENT", "").replace("GENERIC_", "").replace("EXPERIENCE_", "").replace("PLAYER_", ""));
             } catch (IllegalArgumentException ex2) {
                 return;
             }
@@ -117,7 +117,7 @@ public class EffectManager {
         try {
             packet = effectConstructor.newInstance(particles[5], true, (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), (float) offset.getX(), (float) offset.getY(), (float) offset.getZ(),
                     speed, amount, new int[] { blockID, data });
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         if (packet != null)
@@ -135,7 +135,7 @@ public class EffectManager {
         try {
             packet = effectConstructor.newInstance(particles[particle.ordinal()], true, (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), (float) offset.getX(), (float) offset.getY(),
                     (float) offset.getZ(), speed, amount, null);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         if (packet != null)

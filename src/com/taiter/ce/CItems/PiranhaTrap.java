@@ -77,11 +77,11 @@ public class PiranhaTrap extends CItem {
 					player.sendMessage(ChatColor.RED + "You are bitten by piranhas and your bleeding intensifies!");
 				}
 				
-				World w = player.getWorld();;
-				w.playEffect(player.getLocation(), Effect.CLICK1, 5);
+				World w = player.getWorld();
+			w.playEffect(player.getLocation(), Effect.CLICK1, 5);
 				
 				
-				final List<Item> fishList = new ArrayList<Item>();
+				final List<Item> fishList = new ArrayList<>();
 
 				final Random rand = new Random();
 				Location lo = player.getLocation().getBlock().getRelative(0,1,0).getLocation();
@@ -126,7 +126,7 @@ public class PiranhaTrap extends CItem {
 							this.cancel();
 						}
 					}
-				}.runTaskTimer(main, 0l, 20l);
+				}.runTaskTimer(main, 0L, 20L);
 				}
 			}
 		return false;

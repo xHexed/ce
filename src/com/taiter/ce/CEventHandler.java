@@ -60,9 +60,9 @@ import com.taiter.ce.Enchantments.Bow.Volley;
 
 public class CEventHandler {
 
-    private static boolean stackEnchantments = Main.config.getBoolean("Global.Runecrafting.CanStackEnchantments");
-    private static boolean disenchanting = Main.config.getBoolean("Global.Runecrafting.Disenchanting");
-    private static boolean transform = Main.config.getBoolean("Global.Runecrafting.TransformationEffect");
+    private static final boolean stackEnchantments = Main.config.getBoolean("Global.Runecrafting.CanStackEnchantments");
+    private static final boolean disenchanting = Main.config.getBoolean("Global.Runecrafting.Disenchanting");
+    private static final boolean transform = Main.config.getBoolean("Global.Runecrafting.TransformationEffect");
 
     public static void handleArmor(Player toCheck, ItemStack toAdd, Boolean remove, Event event) {
         if (toAdd != null && toAdd.getType() != Material.AIR && toAdd.hasItemMeta() && toAdd.getItemMeta().hasLore())
@@ -111,7 +111,7 @@ public class CEventHandler {
 
         if (i.getType().equals(Material.BOOK)) {
 
-            List<CEnchantment> list = new ArrayList<CEnchantment>();
+            List<CEnchantment> list = new ArrayList<>();
             for (CEnchantment ce : EnchantManager.getEnchantments())
                 if (!Boolean.parseBoolean(Main.config.getString("Global.Enchantments.RequirePermissions")) || Tools.checkPermission(ce, p))
                     list.add(ce);
@@ -139,7 +139,7 @@ public class CEventHandler {
             return;
 
         ItemMeta im = i.getItemMeta();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
 
         if (im.hasLore()) {
             lore = im.getLore();
@@ -163,7 +163,7 @@ public class CEventHandler {
                     break;
                 else if (Tools.random.nextInt(100) < ce.getEnchantProbability()) {
                     if (!lore.isEmpty()) {
-                        Boolean hasFound = false;
+                        boolean hasFound = false;
                         for (String s : lore)
                             if (s.startsWith(ce.getDisplayName()) || ChatColor.stripColor(s).startsWith(ce.getOriginalName()))
                                 hasFound = true;
@@ -450,23 +450,23 @@ public class CEventHandler {
                         int levelCost = 0;
                         double moneyCost = 0;
                         String[] costSplit = ChatColor.stripColor(lore.get(lore.size() - 1)).split(" ");
-                        String resultString = ChatColor.WHITE + "" + ChatColor.BOLD + costSplit[1];
+                        StringBuilder resultString = new StringBuilder(ChatColor.WHITE + "" + ChatColor.BOLD + costSplit[1]);
 
                         if (costSplit.length >= 3 && costSplit[2].equals("Levels")) {
                             levelCost = Integer.parseInt(costSplit[1]);
-                            resultString += " Levels";
+                            resultString.append(" Levels");
                             if (costSplit.length >= 4) {
                                 moneyCost = Double.parseDouble(costSplit[3]);
-                                resultString += ChatColor.GREEN + " and " + ChatColor.WHITE + ChatColor.BOLD + costSplit[3];
+                                resultString.append(ChatColor.GREEN + " and " + ChatColor.WHITE + ChatColor.BOLD).append(costSplit[3]);
                                 for (int i = 4; i < costSplit.length; i++)
-                                    resultString += " " + costSplit[i];
+                                    resultString.append(" ").append(costSplit[i]);
                             }
                         } else {
                             moneyCost = Double.parseDouble(costSplit[1]);
                             if (costSplit.length >= 3)
-                                resultString += costSplit[2];
+                                resultString.append(costSplit[2]);
                             for (int i = 3; i < costSplit.length; i++)
-                                resultString += " " + costSplit[i];
+                                resultString.append(" ").append(costSplit[i]);
                         }
 
                         if (!p.getGameMode().equals(GameMode.CREATIVE))
@@ -502,7 +502,7 @@ public class CEventHandler {
                         tim.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "Transforming...");
                         transformation.setItemMeta(tim);
 
-                        final List<Player> targets = new ArrayList<Player>();
+                        final List<Player> targets = new ArrayList<>();
                         targets.add(p);
                         for (Entity e : p.getNearbyEntities(30, 30, 30))
                             if (e instanceof Player)
@@ -512,7 +512,7 @@ public class CEventHandler {
 
                             int counter = 50;
 
-                            Material[] mats = Material.values();
+                            final Material[] mats = Material.values();
 
                             @Override
                             public void run() {
@@ -732,7 +732,7 @@ public class CEventHandler {
                     } else {
                         ItemMeta im = item.getItemMeta();
                         im.setDisplayName(ChatColor.DARK_RED + "Incompatible Enchantment");
-                        im.setLore(new ArrayList<String>());
+                        im.setLore(new ArrayList<>());
                         item.setItemMeta(im);
                         item.setType(Material.BARRIER);
                         inv.setItem(2, item);

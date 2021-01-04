@@ -44,12 +44,9 @@ public class Medikit extends CItem {
 	@Override
 	public boolean effect(Event event, Player player) {
 		if(event instanceof PlayerInteractEvent) {
-				double maxHealth = ((Damageable) player).getMaxHealth();
-				if(((Damageable) player).getHealth() != maxHealth) {
-					if(((Damageable) player).getHealth() + HealAmount >= maxHealth)
-						player.setHealth(maxHealth);
-					else
-						player.setHealth(((Damageable) player).getHealth() + HealAmount);
+				double maxHealth = player.getMaxHealth();
+				if(player.getHealth() != maxHealth) {
+					player.setHealth(Math.min(player.getHealth() + HealAmount, maxHealth));
 					return true;
 				} else
 					player.sendMessage(ChatColor.RED + "You do not have any wounds to apply the Medikit to!");
@@ -67,12 +64,9 @@ public class Medikit extends CItem {
 			}
 			
 			if(toHeal != null) {
-				double maxHealth = ((Damageable) toHeal).getMaxHealth();
-				if(((Damageable) toHeal).getHealth() != maxHealth) {
-					if(((Damageable) toHeal).getHealth() + HealAmount >= maxHealth)
-						toHeal.setHealth(maxHealth);
-					else
-						toHeal.setHealth(((Damageable) toHeal).getHealth() + HealAmount);
+				double maxHealth = toHeal.getMaxHealth();
+				if(toHeal.getHealth() != maxHealth) {
+					toHeal.setHealth(Math.min(toHeal.getHealth() + HealAmount, maxHealth));
 					player.sendMessage(ChatColor.GREEN + "You have healed " + toHeal.getName() + " using the Medikit!");
 					toHeal.sendMessage(ChatColor.GREEN + player.getName() + " has used a Medikit to heal you!");
 					return true;

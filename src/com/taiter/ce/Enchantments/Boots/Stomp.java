@@ -21,7 +21,6 @@ package com.taiter.ce.Enchantments.Boots;
 import java.util.List;
 
 import org.bukkit.Effect;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -65,8 +64,8 @@ public class Stomp extends CEnchantment {
                             EffectManager.playSound(player.getLocation(), "ENTITY_GENERIC_EXPLODE", 1f, 2f);
 
                             double damage = event.getDamage() / damageReductionFraction;
-                            if (((Damageable) player).getHealth() - damage > 0)
-                                ((LivingEntity) player).damage(damage, player);
+                            if (player.getHealth() - damage > 0)
+                                player.damage(damage, player);
                             else {
                                 player.setLastDamageCause(event);
                                 player.setHealth(0);

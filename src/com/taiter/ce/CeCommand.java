@@ -41,7 +41,7 @@ import com.taiter.ce.Enchantments.EnchantManager;
 
 public class CeCommand {
 
-    private Main main;
+    private final Main main;
     private Boolean confirmUpdate = false;
 
     public CeCommand(Main m) {
@@ -104,7 +104,7 @@ public class CeCommand {
                                 public void run() {
                                     main.updateCheck();
                                 }
-                            }.runTaskLater(Main.plugin, 1l);
+                            }.runTaskLater(Main.plugin, 1L);
                             return "";
                         } else if (toDo.equals("applyupdate")) {
                             if (!main.hasChecked)
@@ -120,8 +120,7 @@ public class CeCommand {
                                             if (confirmUpdate)
                                                 confirmUpdate = false;
                                         }
-                                    }, 6000l);
-                                    return "";
+                                    }, 6000L);
                                 } else {
                                     Main.plugin.getServer().getScheduler().scheduleAsyncDelayedTask(Main.plugin, new BukkitRunnable() {
 
@@ -129,9 +128,9 @@ public class CeCommand {
                                         public void run() {
                                             main.update();
                                         }
-                                    }, 1l);
-                                    return "";
+                                    }, 1L);
                                 }
+                                return "";
                             } else {
                                 Error += "You are already using the latest version of CE.";
                                 return Error;
@@ -175,7 +174,7 @@ public class CeCommand {
 
                     try {
                         mat = Material.getMaterial(Integer.parseInt(args[2]));
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
 
                     if (mat == null) {
@@ -188,40 +187,40 @@ public class CeCommand {
                         }
                     }
 
-                    String fullString = args[3];
+                    StringBuilder fullString = new StringBuilder(args[3]);
                     if (args.length > 4)
                         for (int i = 4; i < args.length; i++)
-                            fullString += " " + args[i];
+                            fullString.append(" ").append(args[i]);
 
-                    fullString = fullString.toLowerCase();
+                    fullString = new StringBuilder(fullString.toString().toLowerCase());
 
                     CItem custom = null;
-                    List<String> enchants = new ArrayList<String>();
-                    List<String> cEnchants = new ArrayList<String>();
+                    List<String> enchants = new ArrayList<>();
+                    List<String> cEnchants = new ArrayList<>();
 
                     for (CItem ci : Main.items) {
-                        if (fullString.contains(ci.getOriginalName().toLowerCase())) {
+                        if (fullString.toString().contains(ci.getOriginalName().toLowerCase())) {
                             custom = ci;
-                            fullString.replace(ci.getOriginalName().toLowerCase(), "");
-                        } else if (fullString.contains(ci.getOriginalName().replace(" ", "").toLowerCase())) {
+                            fullString.toString().replace(ci.getOriginalName().toLowerCase(), "");
+                        } else if (fullString.toString().contains(ci.getOriginalName().replace(" ", "").toLowerCase())) {
                             custom = ci;
-                            fullString.replace(ci.getOriginalName().replace(" ", "").toLowerCase(), "");
-                        } else if (fullString.contains(ci.getDisplayName().toLowerCase())) {
+                            fullString.toString().replace(ci.getOriginalName().replace(" ", "").toLowerCase(), "");
+                        } else if (fullString.toString().contains(ci.getDisplayName().toLowerCase())) {
                             custom = ci;
-                            fullString.replace(ci.getDisplayName().toLowerCase(), "");
-                        } else if (fullString.contains(ci.getDisplayName().replace(" ", "").toLowerCase())) {
+                            fullString.toString().replace(ci.getDisplayName().toLowerCase(), "");
+                        } else if (fullString.toString().contains(ci.getDisplayName().replace(" ", "").toLowerCase())) {
                             custom = ci;
-                            fullString.replace(ci.getDisplayName().replace(" ", "").toLowerCase(), "");
+                            fullString.toString().replace(ci.getDisplayName().replace(" ", "").toLowerCase(), "");
                         }
                     }
 
-                    for (int i = 0; i < fullString.split(" ").length; i++) {
+                    for (int i = 0; i < fullString.toString().split(" ").length; i++) {
                         for (CEnchantment ce : EnchantManager.getEnchantments()) {
                             int level = 0;
                             int index = 0;
                             int endIndex = 0;
                             String enchName = "";
-                            if (fullString.contains(ce.getOriginalName().toLowerCase())) {
+                            if (fullString.toString().contains(ce.getOriginalName().toLowerCase())) {
                                 enchName = ce.getOriginalName().toLowerCase();
                                 index = fullString.indexOf(enchName);
                                 endIndex = index + enchName.length() + 2; // Making a substring from index - endIndex returns the enchantment's name with the level
@@ -241,14 +240,14 @@ public class CeCommand {
                                     String[] finalName = enchName.split(":");
                                     try {
                                         level = Integer.parseInt(finalName[1]);
-                                    } catch (Exception e) {
+                                    } catch (Exception ignored) {
                                     }
                                     enchName = finalName[0];
                                 }
-                                fullString = fullString.replace(enchName, "");
+                                fullString = new StringBuilder(fullString.toString().replace(enchName, ""));
                                 cEnchants.add(ce.getDisplayName() + " " + level);
 
-                            } else if (fullString.contains(ce.getOriginalName().replace(" ", "").toLowerCase())) {
+                            } else if (fullString.toString().contains(ce.getOriginalName().replace(" ", "").toLowerCase())) {
 
                                 enchName = ce.getOriginalName().replace(" ", "").toLowerCase();
                                 index = fullString.indexOf(enchName);
@@ -269,14 +268,14 @@ public class CeCommand {
                                     String[] finalName = enchName.split(":");
                                     try {
                                         level = Integer.parseInt(finalName[1]);
-                                    } catch (Exception e) {
+                                    } catch (Exception ignored) {
                                     }
                                     enchName = finalName[0];
                                 }
-                                fullString = fullString.replace(enchName, "");
+                                fullString = new StringBuilder(fullString.toString().replace(enchName, ""));
                                 cEnchants.add(ce.getDisplayName() + " " + level);
 
-                            } else if (fullString.contains(ce.getDisplayName().toLowerCase())) {
+                            } else if (fullString.toString().contains(ce.getDisplayName().toLowerCase())) {
 
                                 enchName = ce.getDisplayName().toLowerCase();
                                 index = fullString.indexOf(enchName);
@@ -297,14 +296,14 @@ public class CeCommand {
                                     String[] finalName = enchName.split(":");
                                     try {
                                         level = Integer.parseInt(finalName[1]);
-                                    } catch (Exception e) {
+                                    } catch (Exception ignored) {
                                     }
                                     enchName = finalName[0];
                                 }
-                                fullString = fullString.replace(enchName, "");
+                                fullString = new StringBuilder(fullString.toString().replace(enchName, ""));
                                 cEnchants.add(ce.getDisplayName() + " " + level);
 
-                            } else if (fullString.contains(ce.getDisplayName().replace(" ", "").toLowerCase())) {
+                            } else if (fullString.toString().contains(ce.getDisplayName().replace(" ", "").toLowerCase())) {
 
                                 enchName = ce.getDisplayName().replace(" ", "").toLowerCase();
                                 index = fullString.indexOf(enchName);
@@ -325,11 +324,11 @@ public class CeCommand {
                                     String[] finalName = enchName.split(":");
                                     try {
                                         level = Integer.parseInt(finalName[1]);
-                                    } catch (Exception ex) {
+                                    } catch (Exception ignored) {
                                     }
                                     enchName = finalName[0];
                                 }
-                                fullString = fullString.replace(enchName, "");
+                                fullString = new StringBuilder(fullString.toString().replace(enchName, ""));
                                 cEnchants.add(ce.getDisplayName() + " " + level);
 
                             }
@@ -341,7 +340,7 @@ public class CeCommand {
                             int endIndex = 0;
                             String enchName = e.getName().toLowerCase();
 
-                            if (fullString.contains(enchName)) {
+                            if (fullString.toString().contains(enchName)) {
 
                                 index = fullString.indexOf(enchName);
                                 endIndex = index + enchName.length() + 3; // Making a substring from index - endIndex returns the enchantment's name with the level
@@ -361,11 +360,11 @@ public class CeCommand {
                                     String[] finalName = enchName.split(":");
                                     try {
                                         level = Integer.parseInt(finalName[1]);
-                                    } catch (Exception ex) {
+                                    } catch (Exception ignored) {
                                     }
                                     enchName = finalName[0];
                                 }
-                                fullString = fullString.replace(enchName, "");
+                                fullString = new StringBuilder(fullString.toString().replace(enchName, ""));
                                 enchants.add(e.getName() + " " + level);
                             }
                         }
@@ -431,7 +430,7 @@ public class CeCommand {
                             int level = 1;
                             try {
                                 level = Integer.parseInt(enchALvl[1]);
-                            } catch (Exception ex) {
+                            } catch (Exception ignored) {
                             }
                             newItem.addUnsafeEnchantment(ench, level);
                         }
@@ -441,7 +440,7 @@ public class CeCommand {
                         }
                     }
                     if (!cEnchants.isEmpty()) {
-                        HashMap<CEnchantment, Integer> list = new HashMap<CEnchantment, Integer>();
+                        HashMap<CEnchantment, Integer> list = new HashMap<>();
                         for (String e : cEnchants) {
                             String[] split = e.split(" ");
                             list.put(EnchantManager.getEnchantment(e), Integer.parseInt(split[split.length - 1]));
@@ -561,26 +560,26 @@ public class CeCommand {
                     usageError += (name.startsWith("e") ? "enchant [Required Material] <Enchantment> <Level>" : "item <Item>");
                     if (args.length >= 2) {
 
-                        String customName = args[1];
+                        StringBuilder customName = new StringBuilder(args[1]);
                         Material test = null;
 
                         int start = 2;
 
-                        if (Material.getMaterial(customName) != null)
-                            test = Material.getMaterial(customName);
+                        if (Material.getMaterial(customName.toString()) != null)
+                            test = Material.getMaterial(customName.toString());
                         else
                             try {
-                                int material = Integer.parseInt(customName);
+                                int material = Integer.parseInt(customName.toString());
                                 if (Material.getMaterial(material) != null)
                                     test = Material.getMaterial(material);
-                            } catch (NumberFormatException ex) {
+                            } catch (NumberFormatException ignored) {
                             }
 
                         if (test != null) {
                             if (p.getItemInHand().getType() != test)
                                 return Error + "You do not have the right material to enchant this!";
                             start++;
-                            customName = args[2];
+                            customName = new StringBuilder(args[2]);
                         }
 
                         int level = 1;
@@ -590,7 +589,7 @@ public class CeCommand {
                                 return Error + "You are not holding an item in your hand";
                             try {
                                 level = Integer.parseInt(args[args.length - 1]);
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         } else {
                             level = 0;
@@ -604,15 +603,15 @@ public class CeCommand {
 
                         if (args.length > start)
                             for (int i = start; i < (level == 0 ? args.length : args.length - 1); i++)
-                                customName += " " + args[i];
+                                customName.append(" ").append(args[i]);
 
                         CBasic custom = null;
 
                         if (name.startsWith("e")) {
                             for (CEnchantment ce : EnchantManager.getEnchantments())
-                                if (ce.getOriginalName().equalsIgnoreCase(customName) || ChatColor.stripColor(ce.getDisplayName()).equalsIgnoreCase(customName)
-                                        || ce.getOriginalName().replace(" ", "").equalsIgnoreCase(customName)
-                                        || ChatColor.stripColor(ce.getDisplayName()).replace(" ", "").equalsIgnoreCase(customName)) {
+                                if (ce.getOriginalName().equalsIgnoreCase(customName.toString()) || ChatColor.stripColor(ce.getDisplayName()).equalsIgnoreCase(customName.toString())
+                                        || ce.getOriginalName().replace(" ", "").equalsIgnoreCase(customName.toString())
+                                        || ChatColor.stripColor(ce.getDisplayName()).replace(" ", "").equalsIgnoreCase(customName.toString())) {
                                     custom = ce;
                                     if (ce.getEnchantmentMaxLevel() < level) {
                                         level = ce.getEnchantmentMaxLevel();
@@ -620,9 +619,9 @@ public class CeCommand {
                                 }
                         } else {
                             for (CItem ci : Main.items)
-                                if (ci.getOriginalName().equalsIgnoreCase(customName) || ChatColor.stripColor(ci.getDisplayName()).equalsIgnoreCase(customName)
-                                        || ci.getOriginalName().replace(" ", "").equalsIgnoreCase(customName)
-                                        || ChatColor.stripColor(ci.getDisplayName()).replace(" ", "").equalsIgnoreCase(customName)) {
+                                if (ci.getOriginalName().equalsIgnoreCase(customName.toString()) || ChatColor.stripColor(ci.getDisplayName()).equalsIgnoreCase(customName.toString())
+                                        || ci.getOriginalName().replace(" ", "").equalsIgnoreCase(customName.toString())
+                                        || ChatColor.stripColor(ci.getDisplayName()).replace(" ", "").equalsIgnoreCase(customName.toString())) {
                                     custom = ci;
                                 }
 
@@ -634,11 +633,11 @@ public class CeCommand {
                         if (custom == null) {
                             Enchantment ench = null;
                             try {
-                                ench = Enchantment.getById(Integer.parseInt(customName));
+                                ench = Enchantment.getById(Integer.parseInt(customName.toString()));
                             } catch (Exception e) {
                                 try {
-                                    ench = Enchantment.getByName(customName);
-                                } catch (Exception ex) {
+                                    ench = Enchantment.getByName(customName.toString());
+                                } catch (Exception ignored) {
                                 }
                             }
 
@@ -669,7 +668,7 @@ public class CeCommand {
                             return Error;
                         }
 
-                        List<String> lore = new ArrayList<String>();
+                        List<String> lore = new ArrayList<>();
 
                         ItemMeta im = item.getItemMeta();
 
@@ -778,7 +777,7 @@ public class CeCommand {
                         if (args.length == 3) {
                             if (args[2].toLowerCase().startsWith("r")) {
                                 ItemMeta im = item.getItemMeta();
-                                im.setLore(new ArrayList<String>());
+                                im.setLore(new ArrayList<>());
                                 item.setItemMeta(im);
                                 return Success + "You have successfully reset the item's lore!";
                             }
@@ -793,17 +792,17 @@ public class CeCommand {
 
                                 if (option.startsWith("s")) {
 
-                                    String toSet = "";
+                                    StringBuilder toSet = new StringBuilder();
 
                                     for (int i = 3; i < args.length - 1; i++) {
-                                        toSet += args[i] + " ";
+                                        toSet.append(args[i]).append(" ");
                                     }
 
-                                    toSet += args[args.length - 1];
+                                    toSet.append(args[args.length - 1]);
 
-                                    toSet = ChatColor.translateAlternateColorCodes('&', toSet);
+                                    toSet = new StringBuilder(ChatColor.translateAlternateColorCodes('&', toSet.toString()));
 
-                                    im.setDisplayName(toSet);
+                                    im.setDisplayName(toSet.toString());
                                     item.setItemMeta(im);
                                     return Success + "You have successfully set the item's Name!";
 
@@ -829,13 +828,13 @@ public class CeCommand {
 
                                     } else if (option.startsWith("a")) {
 
-                                        String toSet = "";
+                                        StringBuilder toSet = new StringBuilder();
 
                                         for (int i = 3; i < args.length - 1; i++) {
-                                            toSet += args[i] + " ";
+                                            toSet.append(args[i]).append(" ");
                                         }
 
-                                        toSet += args[args.length - 1];
+                                        toSet.append(args[args.length - 1]);
 
                                         im.setDisplayName(im.getDisplayName() + " " + toSet);
                                         item.setItemMeta(im);
@@ -862,15 +861,15 @@ public class CeCommand {
 
                                 if (option.startsWith("s")) {
 
-                                    List<String> lore = new ArrayList<String>();
+                                    List<String> lore = new ArrayList<>();
 
-                                    String toSet = "";
+                                    StringBuilder toSet = new StringBuilder();
 
                                     for (int i = 3; i < args.length - 1; i++)
-                                        toSet += args[i] + " ";
-                                    toSet += args[args.length - 1];
+                                        toSet.append(args[i]).append(" ");
+                                    toSet.append(args[args.length - 1]);
 
-                                    lore.add(toSet);
+                                    lore.add(toSet.toString());
 
                                     im.setLore(lore);
                                     item.setItemMeta(im);
@@ -886,7 +885,7 @@ public class CeCommand {
 
                                         if (ChatColor.valueOf(args[3].toUpperCase()) != null) {
 
-                                            List<String> l = new ArrayList<String>();
+                                            List<String> l = new ArrayList<>();
 
                                             for (String i : lore) {
                                                 l.add(ChatColor.valueOf(args[3].toUpperCase()) + "" + ChatColor.stripColor(i));
@@ -902,15 +901,15 @@ public class CeCommand {
 
                                     } else if (option.startsWith("a")) {
 
-                                        String toSet = "";
+                                        StringBuilder toSet = new StringBuilder();
 
                                         for (int i = 3; i < args.length - 1; i++) {
-                                            toSet += args[i] + " ";
+                                            toSet.append(args[i]).append(" ");
                                         }
 
-                                        toSet += args[args.length - 1];
+                                        toSet.append(args[args.length - 1]);
 
-                                        lore.add(toSet);
+                                        lore.add(toSet.toString());
                                         im.setLore(lore);
                                         item.setItemMeta(im);
                                         return Success + "You have successfully added the new line to the lore!";

@@ -1,7 +1,6 @@
 package com.taiter.ce.CItems;
 
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -94,7 +93,7 @@ public class Deathscythe extends CItem {
 		}
 			
 		for(int i = 1; i < Range; i++) {
-			loc = player.getTargetBlock((Set<Material>)null, i).getLocation();
+			loc = player.getTargetBlock(null, i).getLocation();
 			if(!loc.getBlock().getType().equals(Material.AIR))
 				return true;
 			loc.getWorld().playEffect(loc, Effect.SMOKE, Range*2);

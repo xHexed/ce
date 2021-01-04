@@ -71,7 +71,7 @@ public class Firework extends CEnchantment {
 				
 			}
 
-		}.runTaskTimer(getPlugin(), 0l, delay);
+		}.runTaskTimer(getPlugin(), 0L, delay);
 		} else if(e instanceof EntityDamageByEntityEvent){
 			EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
 			event.getEntity().setMetadata("ce.Firework", new FixedMetadataValue(main, null));

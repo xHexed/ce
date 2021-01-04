@@ -21,7 +21,6 @@ package com.taiter.ce.CItems;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -43,8 +42,8 @@ import com.taiter.ce.Tools;
 
 public class NecromancersStaff extends CItem {
 
-    List<String> spells = Arrays.asList(new String[] { ChatColor.GRAY + "Spell: " + ChatColor.DARK_GRAY + "Wither's Apprentice", ChatColor.GRAY + "Spell: " + ChatColor.DARK_RED + "Fireball",
-            ChatColor.GRAY + "Spell: " + ChatColor.DARK_BLUE + "Lightning Strike" });
+    final List<String> spells = Arrays.asList(ChatColor.GRAY + "Spell: " + ChatColor.DARK_GRAY + "Wither's Apprentice", ChatColor.GRAY + "Spell: " + ChatColor.DARK_RED + "Fireball",
+            ChatColor.GRAY + "Spell: " + ChatColor.DARK_BLUE + "Lightning Strike");
 
     Material Fuel;
 
@@ -71,7 +70,7 @@ public class NecromancersStaff extends CItem {
     public boolean effect(Event event, Player player) {
         PlayerInteractEvent e = (PlayerInteractEvent) event;
         ItemMeta im = e.getPlayer().getItemInHand().getItemMeta();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         if (!im.hasLore()) {
             lore.add(spells.get(0));
             im.setLore(lore);
@@ -141,7 +140,7 @@ public class NecromancersStaff extends CItem {
                     player.launchProjectile(SmallFireball.class).setVelocity(l.getDirection().multiply(1.5));
                     EffectManager.playSound(l, "ENTITY_BLAZE_HIT", 0.2f, 0f);
                 } else if (spell == 2) {
-                    Location target = player.getTargetBlock((Set<Material>) null, 20).getLocation();
+                    Location target = player.getTargetBlock(null, 20).getLocation();
                     player.getWorld().strikeLightning(target);
                     if (Tools.checkWorldGuard(l, player, "TNT", true))
                         player.getWorld().createExplosion(target, 1);
