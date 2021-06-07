@@ -18,11 +18,16 @@ package com.taiter.ce.Enchantments.Tool;
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.taiter.ce.ExplodeEnchantmentEvent;
+import com.taiter.ce.Main;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,12 +38,14 @@ import org.bukkit.inventory.ItemStack;
 
 import com.taiter.ce.Tools;
 import com.taiter.ce.Enchantments.CEnchantment;
+import org.bukkit.scheduler.BukkitTask;
 
 public class Explosive extends CEnchantment {
 
     int Radius;
     boolean LargerRadius;
     boolean DropItems;
+    BlockQueue blockQueue;
 
     public Explosive(Application app) {
         super(app);
@@ -46,6 +53,7 @@ public class Explosive extends CEnchantment {
         configEntries.put("LargerRadius", true);
         configEntries.put("DropItems", true);
         triggers.add(Trigger.BLOCK_BROKEN);
+        blockQueue = new BlockQueue();
     }
 
     @Override
@@ -59,14 +67,15 @@ public class Explosive extends CEnchantment {
         List<Location> locations = new ArrayList<>();
 
         int locRad = Radius;
-        if (LargerRadius && Tools.random.nextInt(100) < level * 5)
+        if (LargerRadius && Tools.random.nextInt(20) < level)
             locRad += 2;
         int r = locRad - 1;
         int start = r / 2;
 
         Location sL = event.getBlock().getLocation();
 
-        player.getWorld().createExplosion(sL, 0f); // Create a fake explosion
+        if (Main.createExplosions)
+            player.getWorld().createExplosion(sL, 0f); // Create a fake explosion
 
         sL.setX(sL.getX() - start);
         sL.setY(sL.getY() - start);
@@ -75,9 +84,7 @@ public class Explosive extends CEnchantment {
         for (int x = 0; x < locRad; x++)
             for (int y = 0; y < locRad; y++)
                 for (int z = 0; z < locRad; z++)
-                    if ((!(x == 0 && y == 0 && z == 0)) && (!(x == r && y == 0 && z == 0)) && (!(x == 0 && y == r && z == 0)) && (!(x == 0 && y == 0 && z == r)) && (!(x == r && y == r && z == 0))
-                            && (!(x == 0 && y == r && z == r)) && (!(x == r && y == 0 && z == r)) && (!(x == r && y == r && z == r)))
-                        locations.add(new Location(sL.getWorld(), sL.getX() + x, sL.getY() + y, sL.getZ() + z));
+                    locations.add(new Location(sL.getWorld(), sL.getX() + x, sL.getY() + y, sL.getZ() + z));
         if (!DropItems) {
             final List<Block> blockList = new ArrayList<>();
             for (final Location loc : locations) {
@@ -94,7 +101,7 @@ public class Explosive extends CEnchantment {
             final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player);
             Bukkit.getPluginManager().callEvent(explodeEvent);
             for (final Block block : blockList) {
-                block.setType(Material.AIR);
+                blockQueue.placeBlock(block, Material.AIR);
             }
         }
         else {
@@ -129,4 +136,36 @@ public class Explosive extends CEnchantment {
         DropItems = Boolean.parseBoolean(getConfig().getString("Enchantments." + getOriginalName() + ".DropItems"));
     }
 
+    static class BlockQueue {
+        private Queue<BlockPlaceTask> tasks = new ArrayDeque<>();
+
+        public BlockQueue() {
+            Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
+                /*
+                if (Boolean.parseBoolean(Main.config.getString("Global.Logging.Enabled"))) {
+                        Bukkit.getLogger().info("Total size: " + tasks.size());
+                }*/
+                long blockPlaced = 0;
+                while (!tasks.isEmpty() && blockPlaced < Main.maxBlockBreakPerTick) {
+                    BlockPlaceTask blockPlace = tasks.poll();
+                    blockPlace.block.setType(blockPlace.material);
+                    blockPlaced++;
+                }
+            }, 0, 1);
+        }
+
+        public void placeBlock(Block block, Material material) {
+            tasks.add(new BlockPlaceTask(block, material));
+        }
+
+        public static class BlockPlaceTask {
+            public Block block;
+            public Material material;
+
+            public BlockPlaceTask(Block block, Material material) {
+                this.block = block;
+                this.material = material;
+            }
+        }
+    }
 }

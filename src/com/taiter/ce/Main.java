@@ -102,6 +102,7 @@ public final class Main extends JavaPlugin {
 
     public static Set<CItem> items;
 
+    public static int maxBlockBreakPerTick;
     public static Boolean createExplosions;
     public static Boolean hasRPGItems = false;
 
@@ -161,6 +162,7 @@ public final class Main extends JavaPlugin {
         //Load global config values
         try {
             createExplosions = Boolean.parseBoolean(Main.config.getString("Global.CreateExplosions"));
+            maxBlockBreakPerTick = Main.config.getInt("Global.MaxBlockBreakPerTick");
             // Get the maximum amount of Enchantments on an Item
             EnchantManager.setMaxEnchants(Integer.parseInt(config.getString("Global.Enchantments.MaximumCustomEnchantments")));
         } catch (Exception ex) {
