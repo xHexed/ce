@@ -48,7 +48,7 @@ public class Piercing extends CEnchantment {
 
             int armorCounter = 0;
             for (ItemStack piece : target.getEquipment().getArmorContents())
-                if (!piece.getType().equals(Material.AIR))
+                if (piece != null && !piece.getType().equals(Material.AIR))
                     armorCounter++;
 
             if (armorCounter == 0)
