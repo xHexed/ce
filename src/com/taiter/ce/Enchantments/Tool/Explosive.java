@@ -101,7 +101,7 @@ public class Explosive extends CEnchantment {
             final ExplodeEnchantmentEvent explodeEvent = new ExplodeEnchantmentEvent(blockList, player);
             Bukkit.getPluginManager().callEvent(explodeEvent);
             for (final Block block : blockList) {
-                blockQueue.placeBlock(block, Material.AIR);
+                blockQueue.placeBlock(block);
             }
         }
         else {
@@ -137,7 +137,7 @@ public class Explosive extends CEnchantment {
     }
 
     static class BlockQueue {
-        private Queue<BlockPlaceTask> tasks = new ArrayDeque<>();
+        private Queue<Block> tasks = new ArrayDeque<>();
 
         public BlockQueue() {
             Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
@@ -147,25 +147,14 @@ public class Explosive extends CEnchantment {
                 }*/
                 long blockPlaced = 0;
                 while (!tasks.isEmpty() && blockPlaced < Main.maxBlockBreakPerTick) {
-                    BlockPlaceTask blockPlace = tasks.poll();
-                    blockPlace.block.setType(blockPlace.material);
+                    tasks.poll().setType(Material.AIR);
                     blockPlaced++;
                 }
             }, 0, 1);
         }
 
-        public void placeBlock(Block block, Material material) {
-            tasks.add(new BlockPlaceTask(block, material));
-        }
-
-        public static class BlockPlaceTask {
-            public Block block;
-            public Material material;
-
-            public BlockPlaceTask(Block block, Material material) {
-                this.block = block;
-                this.material = material;
-            }
+        public void placeBlock(Block block) {
+            tasks.add(block);
         }
     }
 }
